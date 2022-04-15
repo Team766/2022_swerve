@@ -58,7 +58,11 @@ public class Drive extends Mechanism {
   );
 
   private GyroReader m_navx;
-
+  private TalonSRX m_fL;
+  private TalonSRX m_fR;
+  private TalonSRX m_bL;
+  private TalonSRX m_bR;
+  
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
   private final SwerveModule m_frontRightModule;
@@ -68,10 +72,6 @@ public class Drive extends Mechanism {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
   public Drive() {
-    private TalonSRX m_fL;
-    private TalonSRX m_fR;
-    private TalonSRX m_bL;
-    private TalonSRX m_bR;
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
     //
