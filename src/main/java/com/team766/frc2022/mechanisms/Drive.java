@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 
+import static frc.robot.Constants.*;
+
 public class Drive extends Mechanism {
 
 
@@ -154,7 +156,7 @@ public class Drive extends Mechanism {
   }
 
   public Rotation2d getGyroscopeRotation() {
-      context.takeOwnership(Robot.gyro);
+    context.takeOwnership(Robot.gyro);
     if (m_navx.isMagnetometerCalibrated()) {
       // We will only get valid fused headings if the magnetometer is calibrated
       return Rotation2d.fromDegrees(m_navx.getFusedHeading());
