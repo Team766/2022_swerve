@@ -106,7 +106,7 @@ public class Drive extends Mechanism {
     // FIXME Setup motor configuration
     m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
             // This can either be STANDARD or FAST depending on your gear configuration
-            Mk3SwerveModuleHelper.GearRatio.STANDARD,
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             // This is the ID of the drive motor
             FRONT_LEFT_MODULE_DRIVE_MOTOR,
             // This is the ID of the steer motor
@@ -119,7 +119,7 @@ public class Drive extends Mechanism {
 
     // We will do the same for the other modules
     m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk3SwerveModuleHelper.GearRatio.STANDARD,
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -127,7 +127,7 @@ public class Drive extends Mechanism {
     );
 
     m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk3SwerveModuleHelper.GearRatio.STANDARD,
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
@@ -135,7 +135,7 @@ public class Drive extends Mechanism {
     );
 
     m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk3SwerveModuleHelper.GearRatio.STANDARD,
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,
