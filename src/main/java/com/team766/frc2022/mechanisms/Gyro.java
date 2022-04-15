@@ -37,7 +37,7 @@ public class Gyro extends Mechanism {
 		double angle = m_gyro.getYaw();
 		return angle;
 	}
-	public coid zeroYaw(){
+	public void zeroYaw(){
 		checkContextOwnership();
 		m_gyro.zeroYaw();
 	}

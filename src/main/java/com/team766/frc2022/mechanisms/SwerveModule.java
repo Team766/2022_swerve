@@ -6,6 +6,9 @@ import com.team766.framework.Context;
 import com.team766.logging.Category;
 import com.team766.controllers.PIDController;
 import com.team766.controllers.PIDController;
+import com.team766.hal.SpeedController;
+import com.team766.hal.CANSpeedController.ControlMode;
+import com.team766.hal.CANSpeedController;
 
 public class SwerveModule extends Mechanism
 {
