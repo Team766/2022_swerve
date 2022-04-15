@@ -37,7 +37,12 @@ public class Gyro extends Mechanism {
 		double angle = m_gyro.getYaw();
 		return angle;
 	}
-
+	public coid zeroYaw(){
+		checkContextOwnership();
+		m_gyro.zeroYaw();
+	}
+	public boolean isMagnetometerCalibrated(){ return m_gyro.isMagnetometerCalibrated(); }
+	public double getFusedHeading() { return m_gyro.getFusedHeading(); }
 	public double getGyroRoll() {
 		double angle = m_gyro.getRoll();
 		return angle;

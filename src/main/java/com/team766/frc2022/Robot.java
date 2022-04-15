@@ -48,6 +48,7 @@ public class Robot extends MyRobot {
 		
 		
 		m_oi = new OI();
+		gyro = new Gyro();
 	}
 	
 	@Override
