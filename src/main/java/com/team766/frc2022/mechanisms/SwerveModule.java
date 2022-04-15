@@ -16,7 +16,7 @@ public class SwerveModule extends Mechanism
 	public double power;
 	public final double ppr = 256; //encodure pulses per revolutipn
 	public final double radius = 0.075; //radius of wheel
-    public SwerveDriveWheel(double P, double I, double D, CANSpeedController m_turn, CANSpeedController m_drive)
+    public SwerveModule(double P, double I, double D, CANSpeedController m_turn, CANSpeedController m_drive)
     {
         this.m_turn = m_turn;
 		this.m_drive = m_drive;
@@ -37,7 +37,7 @@ public class SwerveModule extends Mechanism
     {
 		context.takeOwnership(Robot.drive);
         Robot.drive.resetGyro();
-		directionController.reset()
+		directionController.reset();
 		int gain;
 
 		while (directionController.isDone()==false){ //not sure this is the right way to do it
