@@ -57,7 +57,7 @@ public class SwerveModule extends Mechanism
 			else
 			{
 				// flip the motor direction and use the setpoint + 180
-				gain = -1
+				gain = -1;
 				directionController.setSetpoint(currentAngle + setpointAngleFlipped);
 			}
 			directionController.calculate(currentAngle, true);

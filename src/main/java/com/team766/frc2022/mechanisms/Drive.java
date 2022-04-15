@@ -12,6 +12,7 @@ import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
 import com.team766.hal.GyroReader;
 import com.team766.config.ConfigFileReader;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Drive extends Mechanism {
 
@@ -67,7 +68,10 @@ public class Drive extends Mechanism {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
   public Drive() {
-
+    private TalonSRX m_fL;
+    private TalonSRX m_fR;
+    private TalonSRX m_bL;
+    private TalonSRX m_bR;
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
     //
@@ -125,6 +129,10 @@ public class Drive extends Mechanism {
             BACK_RIGHT_MODULE_STEER_ENCODER,
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
+    m_fL = new TalonSRX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
+    m_fR = new TalonSRX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
+    m_bL = new TalonSRX(BACK_LEFT_MODULE_DRIVE_MOTOR);
+    m_bR = new TalonSRX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
   }
 
   /**
@@ -136,7 +144,7 @@ public class Drive extends Mechanism {
   }
 
   public Rotation2d getGyroscopeRotation() {
-      context.takeOwnership(Robot.gyro)
+      context.takeOwnership(Robot.gyro);
     if (m_navx.isMagnetometerCalibrated()) {
       // We will only get valid fused headings if the magnetometer is calibrated
       return Rotation2d.fromDegrees(m_navx.getFusedHeading());
