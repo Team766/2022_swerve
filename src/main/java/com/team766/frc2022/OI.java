@@ -26,10 +26,14 @@ public class OI extends Procedure {
 	}
 	
 	public void run(Context context) {
+		context.takeOwnership(Robot.drive);
 		while (true) {
 			// Add driver controls here - make sure to take/release ownership
 			// of mechanisms when appropriate.
-			
+			double x_raw = m_joystick0.getAxis(0);
+			double y_raw = m_joystick0.getAxis(1);
+			double rotation = Math.copySign(Math.pow(m_joystick1.getAxis(4), 2), m_joystick1.getAxis(4));
+			Robot.drive.setSwerve(new Translation2d(x_raw, y_raw), rotation, true);
 
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
