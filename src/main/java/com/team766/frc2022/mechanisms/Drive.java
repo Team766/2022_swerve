@@ -1,7 +1,6 @@
 package com.team766.frc2022.mechanisms;
 
 import com.team766.framework.Mechanism;
-import com.team766.frc2022.subsystems.DrivetrainSubsystem;
 import com.team766.framework.Mechanism;
 import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
