@@ -12,6 +12,7 @@ import com.team766.hal.CANSpeedController;
 
 public class SwerveModule extends Mechanism
 {
+	/*
     public PIDController directionController;
 	private CANSpeedController m_turn;
 	private CANSpeedController m_drive;
@@ -75,4 +76,5 @@ public class SwerveModule extends Mechanism
     {
         m_drive.set(speed);
     }
+	*/
 }
