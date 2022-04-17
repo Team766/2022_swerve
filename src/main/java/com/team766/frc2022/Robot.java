@@ -22,6 +22,7 @@ public class Robot extends MyRobot {
 	
 	private static OI m_oi;
 	private static Gyro gyro;
+	public static Drive drive;
 	
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;
@@ -50,6 +51,7 @@ public class Robot extends MyRobot {
 		
 		m_oi = new OI();
 		gyro = new Gyro();
+		drive = new Drive();
 	}
 	
 	@Override
