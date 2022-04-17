@@ -1,12 +1,9 @@
 package com.team766.frc2022.mechanisms;
 
 import com.team766.framework.Mechanism;
-import com.team766.framework.Mechanism;
 import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
 import com.team766.hal.SpeedController;
-import com.team766.hal.CANSpeedController.ControlMode;
-import com.team766.hal.CANSpeedController;
 import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
 import com.team766.hal.GyroReader;
@@ -14,7 +11,7 @@ import com.team766.config.ConfigFileReader;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import com.kauailabs.navx.frc.*;
 
 import static frc.robot.Constants.*;
 
@@ -144,6 +142,8 @@ public class Drive extends Mechanism {
     m_fR = new TalonSRX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
     m_bL = new TalonSRX(BACK_LEFT_MODULE_DRIVE_MOTOR);
     m_bR = new TalonSRX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
+    m_gyro = new Gyro();
+
   }
 
   /**
@@ -155,7 +155,7 @@ public class Drive extends Mechanism {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    context.takeOwnership(Robot.gyro);
+    checkContextOwnership();
     if (m_navx.isMagnetometerCalibrated()) {
       // We will only get valid fused headings if the magnetometer is calibrated
       return Rotation2d.fromDegrees(m_navx.getFusedHeading());
@@ -166,6 +166,7 @@ public class Drive extends Mechanism {
   }
 
   public void setSwerve(ChassisSpeeds chassisSpeeds) {
+    checkContextOwnership();
     m_chassisSpeeds = chassisSpeeds;
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
     SwerveDriveKinematics.normalizeWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
@@ -193,7 +194,7 @@ public class Drive extends Mechanism {
   }
   //returns motor power in watts, useful for dissipation, more accurate limiting, etc.
   public double getOutputPower(TalonSRX motor){
-    return motor.getMotor.OutputVoltage()*motor.getOutputCurrent();
+    return motor.getMotorOutputVoltage()*motor.getOutputCurrent();
   }
   //returns the direction of the robot with the most net force (torque*wheel_r*Math.relevantcomponent(wheel angle)) but since we don't care about magnitude I can leave out wheel radius since Torque is proportional to force when every wheel has the same radius
   public Rotation2d netForceVector(){
