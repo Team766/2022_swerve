@@ -21,6 +21,7 @@ public class Robot extends MyRobot {
 	
 	
 	private static OI m_oi;
+	private static Gyro gyro;
 	
 	private WebServer m_webServer;
 	private AutonomousSelector m_autonSelector;

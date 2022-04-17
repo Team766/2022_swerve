@@ -11,7 +11,7 @@ import com.team766.config.ConfigFileReader;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
-import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -66,7 +66,7 @@ public class Drive extends Mechanism {
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
 
-  private GyroReader m_navx;
+  private Gyro m_navx;
   private TalonSRX m_fL;
   private TalonSRX m_fR;
   private TalonSRX m_bL;
@@ -101,9 +101,9 @@ public class Drive extends Mechanism {
     // By default we will use Falcon 500s in standard configuration. But if you use a different configuration or motors
     // you MUST change it. If you do not, your code will crash on startup.
     // FIXME Setup motor configuration
-    m_frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
+    m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
             // This can either be STANDARD or FAST depending on your gear configuration
-            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             // This is the ID of the drive motor
             FRONT_LEFT_MODULE_DRIVE_MOTOR,
             // This is the ID of the steer motor
@@ -115,24 +115,24 @@ public class Drive extends Mechanism {
     );
 
     // We will do the same for the other modules
-    m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
-            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
+    m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
             FRONT_RIGHT_MODULE_STEER_OFFSET
     );
 
-    m_backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
-            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
+    m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
             BACK_LEFT_MODULE_STEER_OFFSET
     );
 
-    m_backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
-            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
+    m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+            Mk4SwerveModuleHelper.GearRatio.STANDARD,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,
@@ -142,7 +142,7 @@ public class Drive extends Mechanism {
     m_fR = new TalonSRX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
     m_bL = new TalonSRX(BACK_LEFT_MODULE_DRIVE_MOTOR);
     m_bR = new TalonSRX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
-    m_gyro = new Gyro();
+    m_navx = new Gyro();
 
   }
 
@@ -169,7 +169,7 @@ public class Drive extends Mechanism {
     checkContextOwnership();
     m_chassisSpeeds = chassisSpeeds;
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
-    SwerveDriveKinematics.normalizeWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
     m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
