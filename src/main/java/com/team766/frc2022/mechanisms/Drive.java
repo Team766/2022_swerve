@@ -182,7 +182,7 @@ public class Drive extends Mechanism {
         speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
     }
 
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     m_frontLeftModule.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
     m_frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
     m_backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
