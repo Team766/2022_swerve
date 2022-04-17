@@ -177,7 +177,7 @@ public class Drive extends Mechanism {
     ChassisSpeeds speeds;
     if (fieldOriented) {
         speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation,
-                Rotation2d.fromDegrees(gyroscope.getAngle().toDegrees()));
+                Rotation2d.fromDegrees(m_navx.getAngle().toDegrees()));
     } else {
         speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
     }
