@@ -18,10 +18,10 @@ import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import static frc.robot.Constants.*;
 
@@ -103,9 +103,9 @@ public class Drive extends Mechanism {
     // By default we will use Falcon 500s in standard configuration. But if you use a different configuration or motors
     // you MUST change it. If you do not, your code will crash on startup.
     // FIXME Setup motor configuration
-    m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+    m_frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
             // This can either be STANDARD or FAST depending on your gear configuration
-            Mk4SwerveModuleHelper.GearRatio.STANDARD,
+            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
             // This is the ID of the drive motor
             FRONT_LEFT_MODULE_DRIVE_MOTOR,
             // This is the ID of the steer motor
@@ -117,24 +117,24 @@ public class Drive extends Mechanism {
     );
 
     // We will do the same for the other modules
-    m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk4SwerveModuleHelper.GearRatio.STANDARD,
+    m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
             FRONT_RIGHT_MODULE_STEER_OFFSET
     );
 
-    m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk4SwerveModuleHelper.GearRatio.STANDARD,
+    m_backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
+            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
             BACK_LEFT_MODULE_STEER_OFFSET
     );
 
-    m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
-            Mk4SwerveModuleHelper.GearRatio.STANDARD,
+    m_backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+            Mk4iSwerveModuleHelper.GearRatio.STANDARD,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,
@@ -195,9 +195,12 @@ public class Drive extends Mechanism {
   public double getOutputPower(TalonSRX motor){
     return motor.getMotor.OutputVoltage()*motor.getOutputCurrent();
   }
-
+  //returns the direction of the robot with the most net force (torque*wheel_r*Math.relevantcomponent(wheel angle)) but since we don't care about magnitude I can leave out wheel radius since Torque is proportional to force when every wheel has the same radius
   public Rotation2d netForceVector(){
-    
+    Rotation2d netForce = new Rotation2d(getTorque(m_fL)*Math.cos(m_frontLeftModule.getStateAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getStateAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getStateAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getStateAngle()),
+                                         getTorque(m_fL)*Math.sin(m_frontLeftModule.getStateAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getStateAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getStateAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getStateAngle())
+    );
+    return netForce;
   }
 }
 
