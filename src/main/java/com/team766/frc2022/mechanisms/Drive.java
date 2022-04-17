@@ -17,7 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
@@ -174,6 +174,30 @@ public class Drive extends Mechanism {
     m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
     m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+  }
+
+  /**
+   * Approximates the torque applied by a motor, https://things-in-motion.blogspot.com/2018/12/how-to-estimate-torque-of-bldc-pmsm.html
+   * It uses a Kv constant for a Neo motor because Rev/Ctr didn't publish the specs for the falcon500
+   * Since the Talon motor controler can't measure stator current and is just measuring input current, this number becomes less accurate
+   * as the stator energization duty cycle drops (bldc motors are controlled with pwm and as the duty cycle goes down from %100 this current value gets more wrong)
+   * I tried to correct this by trying to get a solid value for the duty cycle but this more of a relative measurment.
+   * The function returns the torque applied by the motor in units of N/m
+   */
+  public double getTorque(TalonSRX motor){
+    return 8.3*motor.getOutputCurrent()/473; //using Kv for a Neo motor which should be roughly similar to falcon 500, 8.3*I/kV
+  }
+
+  public double getPWM(TalonSRX motor){
+    return motor.getMotorOutputPercent();
+  }
+  //returns motor power in watts, useful for dissipation, more accurate limiting, etc.
+  public double getOutputPower(TalonSRX motor){
+    return motor.getMotor.OutputVoltage()*motor.getOutputCurrent();
+  }
+
+  public Rotation2d netForceVector(){
+    
   }
 }
 
