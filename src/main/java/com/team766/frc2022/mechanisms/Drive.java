@@ -171,22 +171,16 @@ public class Drive extends Mechanism {
     return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
   }
 
-  public void setSwerve(Translation2d translation, double rotation, boolean FOC) {
+  public void setSwerve(ChassisSpeeds chassisSpeeds) {
     checkContextOwnership();
-    rotation *= 2.0 / Math.hypot(DRIVETRAIN_WHEELBASE_METERS, DRIVETRAIN_TRACKWIDTH_METERS);
-    ChassisSpeeds speeds;
-    if (fieldOriented) {
-        speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation,
-                Rotation2d.fromDegrees(m_navx.getAngle().toDegrees()));
-    } else {
-        speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
-    }
+    m_chassisSpeeds = chassisSpeeds;
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
-    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
-    m_frontLeftModule.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
-    m_frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
-    m_backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
-    m_backRightModule.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
+    m_frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
+    m_frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
+    m_backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
+    m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
   }
 
   /**

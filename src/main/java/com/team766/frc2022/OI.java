@@ -7,7 +7,7 @@ import com.team766.frc2022.procedures.*;
 import com.team766.hal.JoystickReader;
 import com.team766.hal.RobotProvider;
 import com.team766.logging.Category;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -34,7 +34,7 @@ public class OI extends Procedure {
 			double x_raw = m_joystick0.getAxis(0);
 			double y_raw = m_joystick0.getAxis(1);
 			double rotation = Math.copySign(Math.pow(m_joystick1.getAxis(4), 2), m_joystick1.getAxis(4));
-			Robot.drive.setSwerve(new Translation2d(x_raw, y_raw), rotation, true);
+			Robot.drive.setSwerve(ChassisSpeeds.fromFieldRelativeSpeeds(x_raw, y_raw, rotation, Rotation2d.fromDegrees(Robot.gyro.getFusedHeading())));
 
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
