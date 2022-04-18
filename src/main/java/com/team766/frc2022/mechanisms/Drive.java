@@ -191,15 +191,15 @@ public class Drive extends Mechanism {
    * I tried to correct this by trying to get a solid value for the duty cycle but this more of a relative measurment.
    * The function returns the torque applied by the motor in units of N/m
    */
-  public double getTorque(TalonSRX motor){
+  public double getTorque(CANSpeedController motor){
     return 8.3*motor.getOutputCurrent()/473; //using Kv for a Neo motor which should be roughly similar to falcon 500, 8.3*I/kV
   }
 
-  public double getPWM(TalonSRX motor){
+  public double getPWM(CANSpeedController motor){
     return motor.getMotorOutputPercent();
   }
   //returns motor power in watts, useful for dissipation, more accurate limiting, etc.
-  public double getOutputPower(TalonSRX motor){
+  public double getOutputPower(CANSpeedController motor){
     return motor.getMotorOutputVoltage()*motor.getOutputCurrent();
   }
   //returns the direction of the robot with the most net force (torque*wheel_r*Math.relevantcomponent(wheel angle)) but since we don't care about magnitude I can leave out wheel radius since Torque is proportional to force when every wheel has the same radius
