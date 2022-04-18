@@ -13,6 +13,7 @@ import com.team766.hal.CANSpeedController;
 import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
 import com.team766.config.ConfigFileReader;
+import com.team766.controllers.PIDController;
 //import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
@@ -184,6 +185,24 @@ public class Drive extends Mechanism {
     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
   }
 
+  public void preciseTurn(Rotation2d angle_rad){
+      Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
+      controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
+      controller.setSetpoint(initial_angle+angle_rad);
+      while(!controller.isDone()){
+				controller.calculate(gyro.getAngle(), true);
+				double turn = controller.getOutput();
+				if (Math.abs(turn) < minpower_turn){
+					if (turn>0){
+            turn = minpower_turn;
+          } else {
+              turn = -minpower_turn;
+          }  
+        }
+				setSwerve(new ChassisSpeeds(0, 0, turn));
+      }
+
+  }
   /**
    * Approximates the torque applied by a motor, https://things-in-motion.blogspot.com/2018/12/how-to-estimate-torque-of-bldc-pmsm.html
    * It uses a Kv constant for a Neo motor because Rev/Ctr didn't publish the specs for the falcon500
@@ -204,7 +223,7 @@ public class Drive extends Mechanism {
     return motor.getMotorOutputVoltage()*motor.getOutputCurrent();
   }
   //returns the direction of the robot with the most net force (torque*wheel_r*Math.relevantcomponent(wheel angle)) but since we don't care about magnitude I can leave out wheel radius since Torque is proportional to force when every wheel has the same radius
-  public Rotation2d netForceVector(){
+  public Rotation2d netForceDirection(){
     Rotation2d netForce = new Rotation2d(getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle()),
                                          getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle())
     );
