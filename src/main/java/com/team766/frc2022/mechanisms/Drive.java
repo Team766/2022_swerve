@@ -7,14 +7,12 @@
 package com.team766.frc2022.mechanisms;
 
 import com.team766.framework.Mechanism;
-import com.team766.hal.EncoderReader;
 import com.team766.hal.RobotProvider;
-import com.team766.hal.SpeedController;
+import com.team766.hal.CANSpeedController;
 import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
-import com.team766.hal.GyroReader;
 import com.team766.config.ConfigFileReader;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
@@ -73,10 +71,10 @@ public class Drive extends Mechanism {
   );
 
   private Gyro m_navx;
-  private TalonSRX m_fL;
-  private TalonSRX m_fR;
-  private TalonSRX m_bL;
-  private TalonSRX m_bR;
+  private CANSpeedController m_fL;
+  private CANSpeedController m_fR;
+  private CANSpeedController m_bL;
+  private CANSpeedController m_bR;
 
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
@@ -87,6 +85,7 @@ public class Drive extends Mechanism {
   private ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
   public Drive() {
+    loggerCategory = Category.DRIVE;
     // There are 4 methods you can call to create your swerve modules.
     // The method you use depends on what motors you are using.
     //
@@ -144,10 +143,11 @@ public class Drive extends Mechanism {
             BACK_RIGHT_MODULE_STEER_ENCODER,
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
-    m_fL = new TalonSRX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
-    m_fR = new TalonSRX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
-    m_bL = new TalonSRX(BACK_LEFT_MODULE_DRIVE_MOTOR);
-    m_bR = new TalonSRX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
+    //TODO: These values are placeholders and need to be changed, they are intentionally bad. The naming convention for the variables is m_(front or back abbreviated to one letter)(Right or left motor abbreviated to one letter)
+    m_fL = RobotProvider.instance.getCANMotor("drive.leftTalon1");
+    m_fR = RobotProvider.instance.getCANMotor("drive.leftTalon2");
+    m_bL = RobotProvider.instance.getCANMotor("drive.leftTalon3");
+    m_bR = RobotProvider.instance.getCANMotor("drive.rightTalon1");
     m_navx = new Gyro();
 
   }
