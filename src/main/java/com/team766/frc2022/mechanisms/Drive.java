@@ -78,6 +78,15 @@ public class Drive extends Mechanism {
   private CANSpeedController m_bL;
   private CANSpeedController m_bR;
 
+	// Values for PID turning
+	public double P_turn = ConfigFileReader.getInstance().getDouble("drive.turn.P").valueOr(0.0);
+	public double I_turn = ConfigFileReader.getInstance().getDouble("drive.turn.I").valueOr(0.0);
+	public double D_turn = ConfigFileReader.getInstance().getDouble("drive.turn.D").valueOr(0.0);
+	public double threshold_turn = ConfigFileReader.getInstance().getDouble("drive.turn.thereshold").valueOr(0.0);
+	public double minpower_turn = ConfigFileReader.getInstance().getDouble("drive.turn.minpower").valueOr(0.0);
+	public double min_turn = -12;
+	public double max_turn = 12;
+
   // These are our modules. We initialize them in the constructor.
   private final SwerveModule m_frontLeftModule;
   private final SwerveModule m_frontRightModule;
@@ -185,6 +194,9 @@ public class Drive extends Mechanism {
     m_backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
   }
 
+	/**
+	 * Uses PID to precisely turn the swerve modules
+	 */
   public void preciseTurn(Rotation2d angle_rad){
       Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
       controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
