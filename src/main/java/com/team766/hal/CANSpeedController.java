@@ -2,6 +2,7 @@ package com.team766.hal;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.team766.logging.LoggerExceptionUtils;
 
 /**
  * Interface for speed controlling devices over CAN bus.
@@ -105,4 +106,24 @@ public interface CANSpeedController extends SpeedController {
 	void setOpenLoopRamp(double secondsFromNeutralToFull);
 
 	void setClosedLoopRamp(double secondsFromNeutralToFull);
+
+	default double getMotorOutputPercent() { 
+		LoggerExceptionUtils.logException(new UnsupportedOperationException("getMotorOutputPercent() is currently unsupported"));
+		return 0.0;
+	}
+
+	default double getMotorOutputVoltage(){
+		LoggerExceptionUtils.logException(new UnsupportedOperationException("getMotorOutputVoltage() is currently unsupported"));
+		return 0.0;
+	}
+
+	default double getOutputCurrent(){
+		LoggerExceptionUtils.logException(new UnsupportedOperationException("getOutputCurrent() is currently unsupported"));
+		return 0.0;
+	}
+
+	default double getTemperature(){
+		LoggerExceptionUtils.logException(new UnsupportedOperationException("getTemperature() is currently unsupported"));
+		return 0.0;
+	}
 }

@@ -176,5 +176,17 @@ public class CANTalonFxSpeedController extends BaseCTRESpeedController implement
 	public void setNeutralMode(NeutralMode neutralMode) {
 		m_device.setNeutralMode(neutralMode);
 	}
+
+	@Override
+	public double getMotorOutputPercent(){ return m_device.getMotorOutputPercent(); }
+
+	@Override 
+	public double getMotorOutputVoltage(){ return m_device.getMotorOutputVoltage(); }
+
+	@Override
+	public double getOutputCurrent(){ return m_device.getOutputCurrent(); }
+
+	@Override
+	public double getTemperature(){ return m_device.getTemperature(); }
 	
 }
