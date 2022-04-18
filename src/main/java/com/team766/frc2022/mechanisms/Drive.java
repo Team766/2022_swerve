@@ -215,6 +215,14 @@ public class Drive extends Mechanism {
       }
 
   }
+
+	//Turn the individual swerve modules (not the robot!!!) to a given angle relative to their zero.
+	public void swerveWheelTurn(Rotation2d angle){
+    m_frontLeftModule.set(0, angle.getRadians());
+    m_frontRightModule.set(0, angle.getRadians());
+    m_backLeftModule.set(0, angle.getRadians());
+    m_backRightModule.set(0, angle.getRadians());	
+	}
   /**
    * Approximates the torque applied by a motor, https://things-in-motion.blogspot.com/2018/12/how-to-estimate-torque-of-bldc-pmsm.html
    * It uses a Kv constant for a Neo motor because Rev/Ctr didn't publish the specs for the falcon500
