@@ -79,6 +79,7 @@ public class Drive extends Mechanism {
   private CANSpeedController m_bR;
 
 	// Values for PID turning
+	private PIDController controller;
 	public double P_turn = ConfigFileReader.getInstance().getDouble("drive.turn.P").valueOr(0.0);
 	public double I_turn = ConfigFileReader.getInstance().getDouble("drive.turn.I").valueOr(0.0);
 	public double D_turn = ConfigFileReader.getInstance().getDouble("drive.turn.D").valueOr(0.0);
@@ -200,9 +201,9 @@ public class Drive extends Mechanism {
   public void preciseTurn(Rotation2d angle_rad){
       Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
       controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
-      controller.setSetpoint(initial_angle+angle_rad);
+      controller.setSetpoint(initial_angle.add(angle_rad));
       while(!controller.isDone()){
-				controller.calculate(gyro.getAngle(), true);
+				controller.calculate(m_navx.getYaw(), true);
 				double turn = controller.getOutput();
 				if (Math.abs(turn) < minpower_turn){
 					if (turn>0){
