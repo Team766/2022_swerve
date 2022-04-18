@@ -34,7 +34,7 @@ public class OI extends Procedure {
 			// of mechanisms when appropriate.
 			double x_raw = m_joystick0.getAxis(0);
 			double y_raw = m_joystick0.getAxis(1);
-			double rotation = Math.copySign(Math.pow(m_joystick1.getAxis(4), 2), m_joystick1.getAxis(4));
+			double rotation = Math.copySign(Math.pow(m_joystick1.getAxis(0), 2), m_joystick1.getAxis(0));
 			Robot.drive.setSwerve(ChassisSpeeds.fromFieldRelativeSpeeds(x_raw, y_raw, rotation, Rotation2d.fromDegrees(Robot.gyro.getFusedHeading())));
 
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
