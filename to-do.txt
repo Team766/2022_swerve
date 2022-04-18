@@ -1,7 +1,8 @@
 Add to do here:
 Drive:
     Update drive to use MK4i helper not MK4 (their library hasn't been updated to reflect their git repo yet)
-    Finish building antipin technique
+    Update motor definitions in drive to actual motor definitions
+    Pick button and add support for an anti-pin wheel manuver
 OI:
     Add support to reset gyro mid competition
 ###################################################################
