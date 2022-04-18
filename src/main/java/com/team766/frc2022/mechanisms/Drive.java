@@ -1,6 +1,7 @@
 /**
  * TODO:
  * for some reason the sds team hasn't added the mk4iswervemodule helper to their library, make sure to update this code when they do
+ * the motor definitions are also wrong, fix where indicated in the drive constructor
  */
 
 

@@ -1,3 +1,4 @@
+//This was my bad attempt at a custom swerve, the sds code is way better and lets us focus on the cool stuff but I left it here just incase we wanted to use a custom swerve implementation for some reason
 package com.team766.frc2022.mechanisms;
 
 import com.team766.framework.Mechanism;
