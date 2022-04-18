@@ -201,7 +201,7 @@ public class Drive extends Mechanism {
   public void preciseTurn(Rotation2d angle_rad){
       Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
       controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
-      controller.setSetpoint(initial_angle.add(angle_rad));
+      controller.setSetpoint(initial_angle.plus(angle_rad));
       while(!controller.isDone()){
 				controller.calculate(m_navx.getYaw(), true);
 				double turn = controller.getOutput();
@@ -251,5 +251,3 @@ public class Drive extends Mechanism {
     return netForce;
   }
 }
-
-
