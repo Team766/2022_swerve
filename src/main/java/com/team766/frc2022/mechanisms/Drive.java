@@ -199,26 +199,28 @@ public class Drive extends Mechanism {
 	 * Uses PID to precisely turn the swerve modules
 	 */
   public void preciseTurn(Rotation2d angle_rad){
-      Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
-      controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
-      controller.setSetpoint(initial_angle.plus(angle_rad).getDegrees());
-      while(!controller.isDone()){
-				controller.calculate(m_navx.getYaw(), true);
-				double turn = controller.getOutput();
-				if (Math.abs(turn) < minpower_turn){
-					if (turn>0){
-            turn = minpower_turn;
-          } else {
-              turn = -minpower_turn;
-          }  
-        }
-				setSwerve(new ChassisSpeeds(0, 0, turn));
+    checkContextOwnership();
+    Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
+    controller = new PIDController(P_turn, I_turn, D_turn, min_turn, max_turn, threshold_turn);
+    controller.setSetpoint(initial_angle.plus(angle_rad).getDegrees());
+    while(!controller.isDone()){
+      controller.calculate(m_navx.getYaw(), true);
+      double turn = controller.getOutput();
+      if (Math.abs(turn) < minpower_turn){
+        if (turn>0){
+          turn = minpower_turn;
+        } else {
+            turn = -minpower_turn;
+        }  
       }
+      setSwerve(new ChassisSpeeds(0, 0, turn));
+    }
 
   }
 
 	//Turn the individual swerve modules (not the robot!!!) to a given angle relative to their zero.
 	public void swerveWheelTurn(Rotation2d angle){
+    checkContextOwnership();
     m_frontLeftModule.set(0, angle.getRadians());
     m_frontRightModule.set(0, angle.getRadians());
     m_backLeftModule.set(0, angle.getRadians());
