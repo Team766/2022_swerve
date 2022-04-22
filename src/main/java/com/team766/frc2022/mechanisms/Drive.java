@@ -259,6 +259,6 @@ public class Drive extends Mechanism {
   public double netForce(){
     double fx = getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle());
     double fy = getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle());
-    return (Math.sqrt(fx*fx+fy*fy)/DRIVETRAIN_WHEELRADIUS_METERS)*SdsModuleConfigurations.MK4_L2.getDriveReduction();
+    return (Math.sqrt(fx*fx+fy*fy)/DRIVETRAIN_WHEELRADIUS_METERS)*SdsModuleConfigurations.MK4I_L2.getDriveReduction();
   }
 }
