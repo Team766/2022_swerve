@@ -250,4 +250,14 @@ public class Drive extends Mechanism {
     );
     return netForce;
   }
+
+  /**
+   * Returns the netForce on the base of the wheels of the robot (where the wheels contact the ground) as an imagninary net force component centered about the middle of the swerve drive oriented in the robot direction.
+   * This is relative (uncalibrated) but should hold for relative measurments and be pretty close to actual values
+   */
+  public double netForce(){
+    double fx = getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle());
+    double fy = getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle());
+    return (Math.sqrt(fx*fx+fy*fy)/DRIVETRAIN_WHEELRADIUS_METERS)*SdsModuleConfigurations.MK4_L2.getDriveReduction();
+  }
 }

@@ -28,6 +28,9 @@ public final class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 0; // FIXME Set Pigeon ID
 
+    //The radius of a wheel in meters, measured from the center of the axle
+    public static final double DRIVETRAIN_WHEELRADIUS_METERS = 0.0508;
+
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 0; // FIXME Set front left module drive motor ID
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 0; // FIXME Set front left module steer motor ID
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 0; // FIXME Set front left steer encoder ID
