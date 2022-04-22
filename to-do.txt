@@ -1,9 +1,9 @@
 Add to do here:
 Drive:
     Update drive to use MK4i helper not MK4 (their library hasn't been updated to reflect their git repo yet)
-    Update motor definitions in drive to actual motor definitions
-    Pick button and add support for an anti-pin wheel manuver
+    Update motor definitions in drive to actual motor definitions (fix placeholders)
 OI:
-    Add support to reset gyro mid competition
+    Add support to reset gyro mid competition to minimize drift
+    Fix button assignment for anti-pin (fix placeholders)
 ###################################################################
 
