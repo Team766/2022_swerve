@@ -236,6 +236,7 @@ public class Drive extends Mechanism {
     return 8.3*motor.getOutputCurrent()/473; //using Kv for a Neo motor which should be roughly similar to falcon 500, 8.3*I/kV
   }
 
+  //returns voltage duty cycle of a motor
   public double getPWM(CANSpeedController motor){
     return motor.getMotorOutputPercent();
   }
