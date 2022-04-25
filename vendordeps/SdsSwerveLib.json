@@ -9,7 +9,7 @@
 	"jsonUrl": "https://raw.githubusercontent.com/Team766/swerve-lib/main/SdsSwerveLib.json",
 	"javaDependencies": [
 	  {
-		"groupId": "Team766",
+		"groupId": "",
 		"artifactId": "swerve-lib",
 		"version": "2.0.1"
 	  }
