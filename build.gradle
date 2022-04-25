@@ -46,13 +46,14 @@ wpi.java.debugJni = false
 def includeDesktopSupport = false
 
 repositories {
-    jcenter()
-    maven("https://maven.pkg.github.com/Team766") {
-        credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Team766/swerve-lib")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+            }
         }
-    }
 }
 
             
