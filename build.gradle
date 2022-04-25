@@ -47,7 +47,7 @@ def includeDesktopSupport = false
 
 repositories {
     maven {
-        url = uri("https://maven.pkg.github.com")
+        url = uri("https://maven.pkg.github.com/Team766")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
             password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
