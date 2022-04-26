@@ -47,7 +47,7 @@ def includeDesktopSupport = false
 
 repositories {
     maven {
-        url = uri("https://maven.pkg.github.com/Team766/swerve-lib")
+        url = uri("https://maven.pkg.github.com/Team766")
         credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
             password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -84,7 +84,7 @@ dependencies {
     // implementation "org.java-websocket:Java-WebSocket:1.4.0"
     //implementation files('deps/Java-WebSocket-1.3.9.jar')
     implementation files('deps/json-20190722.jar')
-    implementation "com.swervedrivespecialties:swerve-lib:2.0.2"
+    implementation "swerve-lib:2.0.2"
 }
 
 // Simulation configuration (e.g. environment variables).
