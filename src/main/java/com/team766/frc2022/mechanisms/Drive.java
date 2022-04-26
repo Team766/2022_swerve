@@ -78,7 +78,7 @@ public class Drive extends Mechanism {
   private CANSpeedController m_bL;
   private CANSpeedController m_bR;
 
-	// Values for PID turning
+	// Values for PID turning (for precise turn function not steer module control)
 	private PIDController controller;
 	public double P_turn = ConfigFileReader.getInstance().getDouble("drive.turn.P").valueOr(0.0);
 	public double I_turn = ConfigFileReader.getInstance().getDouble("drive.turn.I").valueOr(0.0);

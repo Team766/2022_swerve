@@ -18,7 +18,7 @@ public class OI extends Procedure {
 	private JoystickReader m_joystick0;
 	private JoystickReader m_joystick1;
 	private JoystickReader m_joystick2;
-	
+	private double deadband = 0;
 	public OI() {
 		loggerCategory = Category.OPERATOR_INTERFACE;
 
@@ -32,9 +32,9 @@ public class OI extends Procedure {
 		while (true) {
 			// Add driver controls here - make sure to take/release ownership
 			// of mechanisms when appropriate.
-			double x_raw = m_joystick0.getAxis(0);
-			double y_raw = m_joystick0.getAxis(1);
-			double rotation = Math.copySign(Math.pow(m_joystick1.getAxis(0), 2), m_joystick1.getAxis(0));
+			double x_raw = deadband(m_joystick0.getAxis(0), deadband);
+			double y_raw = deadband(m_joystick0.getAxis(1), deadband);
+			double rotation = deadband(m_joystick1.getAxis(0), deadband);
 			Robot.drive.setSwerve(ChassisSpeeds.fromFieldRelativeSpeeds(x_raw, y_raw, rotation, Rotation2d.fromDegrees(Robot.gyro.getFusedHeading())));
 			if(m_joystick0.getButton(1) || m_joystick1.getButton(1)){ //check if the button I think is the trigger is pressed. If it is, do an anti-pin
 				Rotation2d net_force_direction = Robot.drive.netForceDirection();
@@ -42,6 +42,18 @@ public class OI extends Procedure {
 			}
 
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
+		}
+	}
+
+	public double deadband(double value, double deadband){
+		if (Math.abs(value) > deadband) {
+		if (value > 0.0) {
+			return (value - deadband) / (1.0 - deadband);
+		} else {
+			return (value + deadband) / (1.0 - deadband);
+		}
+		} else {
+		return 0.0;
 		}
 	}
 }
