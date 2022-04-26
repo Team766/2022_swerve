@@ -84,7 +84,7 @@ dependencies {
     // implementation "org.java-websocket:Java-WebSocket:1.4.0"
     //implementation files('deps/Java-WebSocket-1.3.9.jar')
     implementation files('deps/json-20190722.jar')
-    //implementation "com.swervedrivespecialties:swerve-lib"
+    implementation "com.swervedrivespecialties:swerve-lib:2.0.2"
 }
 
 // Simulation configuration (e.g. environment variables).
