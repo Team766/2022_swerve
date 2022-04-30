@@ -36,10 +36,11 @@ public class OI extends Procedure {
 			double y_raw = deadband(m_joystick0.getAxis(1), deadband);
 			double rotation = deadband(m_joystick1.getAxis(0), deadband);
 			Robot.drive.setSwerve(ChassisSpeeds.fromFieldRelativeSpeeds(x_raw, y_raw, rotation, Rotation2d.fromDegrees(Robot.gyro.getFusedHeading())));
-			if(m_joystick0.getButton(1) || m_joystick1.getButton(1)){ //check if the button I think is the trigger is pressed. If it is, do an anti-pin
+			
+			/*if(m_joystick0.getButton(1) || m_joystick1.getButton(1)){ //check if the button I think is the trigger is pressed. If it is, do an anti-pin
 				Rotation2d net_force_direction = Robot.drive.netForceDirection();
 				Robot.drive.swerveWheelTurn(net_force_direction.plus(Rotation2d.fromDegrees(90)));
-			}
+			}*/
 
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}

@@ -157,13 +157,27 @@ public class Drive extends Mechanism {
     );
     //TODO: These values are placeholders and need to be changed, they are intentionally bad. The naming convention for the variables is m_(front or back abbreviated to one letter)(Right or left motor abbreviated to one letter)
     m_fL = RobotProvider.instance.getCANMotor("drive.leftTalon1");
-    m_fR = RobotProvider.instance.getCANMotor("drive.leftTalon2");
-    m_bL = RobotProvider.instance.getCANMotor("drive.leftTalon3");
-    m_bR = RobotProvider.instance.getCANMotor("drive.rightTalon1");
+    m_fR = RobotProvider.instance.getCANMotor("drive.rightTalon1");
+    m_bL = RobotProvider.instance.getCANMotor("drive.leftTalon2");
+    m_bR = RobotProvider.instance.getCANMotor("drive.rightTalon2");
     m_navx = new Gyro();
 
   }
 
+  public double ppr = 256; //pulses per revolution
+	public double radius = 0.075; //radius of the wheel in m
+  public double getDistanceTraveled(){
+    double rev = 0.25 * (m_fL.getSensorPosition() + m_fR.getSensorPosition() + m_bL.getSensorPosition() + m_bR.getSensorPosition())/ppr;
+		double distance = rev*2*Math.PI*radius;
+		return distance;
+  } // needs work, but should do the trick for now
+  public void resetEncoders() {
+		checkContextOwnership();
+		m_fL.setPosition(0);
+		m_fR.setPosition(0);
+		m_fL.setPosition(0);
+		m_fR.setPosition(0);
+	}
   /**
    * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
    * 'forwards' direction.
@@ -247,20 +261,20 @@ public class Drive extends Mechanism {
     return motor.getMotorOutputVoltage()*motor.getOutputCurrent();
   }
   //returns the direction of the robot with the most net force (torque*wheel_r*Math.relevantcomponent(wheel angle)) but since we don't care about magnitude I can leave out wheel radius since Torque is proportional to force when every wheel has the same radius
-  public Rotation2d netForceDirection(){
+  /*public Rotation2d netForceDirection(){
     Rotation2d netForce = new Rotation2d(getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle()),
-                                         getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle())
+      getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle())
     );
     return netForce;
-  }
+  }*/
 
   /**
    * Returns the netForce on the base of the wheels of the robot (where the wheels contact the ground) as an imagninary net force component centered about the middle of the swerve drive oriented in the robot direction.
    * This is relative (uncalibrated) but should hold for relative measurments and be pretty close to actual values
    */
-  public double netForce(){
+  /*public double netForce(){
     double fx = getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle());
     double fy = getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle());
     return (Math.sqrt(fx*fx+fy*fy)/DRIVETRAIN_WHEELRADIUS_METERS)*SdsModuleConfigurations.MK4I_L2.getDriveReduction();
-  }
+  }*/
 }
