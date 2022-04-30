@@ -13,8 +13,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class StraightLines extends Procedure {
 
-	public void run(Context context) {
+	public void run(Context context) {		
 		context.takeOwnership(Robot.drive);
+		Robot.drive.zeroGyroscope();
 		ArrayList<Pose> poses = new ArrayList<Pose>();
 		Pose pose1 = new Pose(1,0); //add in terms of meters from robot
 		poses.add(pose1);
@@ -25,7 +26,6 @@ public class StraightLines extends Procedure {
 		double y_raw = 0;
 		for(Pose nextPose : poses){
 			Robot.drive.resetEncoders();
-			Robot.drive.zeroGyroscope();
 			distance = nextPose.distanceFromCurrent(currentX, currentY);
 			x_raw = nextPose.bestVx(currentX, currentY);
 			y_raw = nextPose.bestVy(currentX, currentY);

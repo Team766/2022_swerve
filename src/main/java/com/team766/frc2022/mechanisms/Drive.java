@@ -175,7 +175,7 @@ public class Drive extends Mechanism {
 		checkContextOwnership();
 		m_fL.setPosition(0);
 		m_fR.setPosition(0);
-		m_fL.setPosition(0);
+		m_fLSS.setPosition(0);
 		m_fR.setPosition(0);
 	}
   /**
