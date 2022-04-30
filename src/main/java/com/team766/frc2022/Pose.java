@@ -36,7 +36,7 @@ public class Pose {
 		return Math.sqrt(Math.pow((x-CurrentX),2)+Math.pow((y-CurrentY),2));
 	}
 	public double getTheta(double oldX, double oldY){
-		return(Math.atan((x - oldX)/(y - oldY)));
+		return(Math.atan2((x - oldX), (y - oldY)));
 	} 
 	private double maxPercent = 1; //0 to 1
 	public double bestVx(double oldX, double oldY){
