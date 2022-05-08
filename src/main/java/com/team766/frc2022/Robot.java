@@ -52,6 +52,7 @@ public class Robot extends MyRobot {
 		m_oi = new OI();
 		gyro = new Gyro();
 		drive = new Drive();
+		gyro.resetGyro();
 	}
 	
 	@Override
