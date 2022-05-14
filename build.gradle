@@ -45,22 +45,6 @@ wpi.java.debugJni = false
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/Team766/swerve-lib")
-        credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.usr")
-                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key")
-        }
-    }
-     maven {
-        url = uri("https://maven.pkg.github.com/Team766/MaroonFramework")
-        credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.usr")
-                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key")
-        }
-    }
-}
 
             
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
