@@ -91,8 +91,8 @@ dependencies {
     // implementation "org.java-websocket:Java-WebSocket:1.4.0"
     //implementation files('deps/Java-WebSocket-1.3.9.jar')
     implementation files('deps/json-20190722.jar')
-    implementation "com.swervedrivespecialties:swerve-lib:2.0.2"
-    implementation "com.team766:maroonframework:1.0.0"
+    implementation files('deps/swerve-lib-2.0.2.jar')
+    implementation files('deps/maroonframework-1.0.0.jar')
 }
 
 // Simulation configuration (e.g. environment variables).
