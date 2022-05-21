@@ -27,7 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.kauailabs.navx.frc.*;
 
-import static frc.robot.Constants.*;
+import static com.team766.frc2022.Constants.*;
 
 public class Drive extends Mechanism {
 
@@ -156,10 +156,10 @@ public class Drive extends Mechanism {
             BACK_RIGHT_MODULE_STEER_OFFSET
     );
     //TODO: These values are placeholders and need to be changed, they are intentionally bad. The naming convention for the variables is m_(front or back abbreviated to one letter)(Right or left motor abbreviated to one letter)
-    m_fL = RobotProvider.instance.getCANMotor("drive.leftTalon1");
+    /*m_fL = RobotProvider.instance.getCANMotor("drive.leftTalon1");
     m_fR = RobotProvider.instance.getCANMotor("drive.leftTalon2");
     m_bL = RobotProvider.instance.getCANMotor("drive.leftTalon3");
-    m_bR = RobotProvider.instance.getCANMotor("drive.rightTalon1");
+    m_bR = RobotProvider.instance.getCANMotor("drive.rightTalon1"); */
     m_navx = new Gyro();
 
   }
@@ -197,7 +197,7 @@ public class Drive extends Mechanism {
 
 	/**
 	 * Uses PID to precisely turn the swerve modules
-	 */
+	 
   public void preciseTurn(Rotation2d angle_rad){
     checkContextOwnership();
     Rotation2d initial_angle = Rotation2d.fromDegrees(m_navx.getYaw());
@@ -217,7 +217,7 @@ public class Drive extends Mechanism {
     }
 
   }
-
+*/
 	//Turn the individual swerve modules (not the robot!!!) to a given angle relative to their zero.
 	public void swerveWheelTurn(Rotation2d angle){
     checkContextOwnership();
@@ -258,9 +258,9 @@ public class Drive extends Mechanism {
    * Returns the netForce on the base of the wheels of the robot (where the wheels contact the ground) as an imagninary net force component centered about the middle of the swerve drive oriented in the robot direction.
    * This is relative (uncalibrated) but should hold for relative measurments and be pretty close to actual values
    */
-  public double netForce(){
+ /* public double netForce(){
     double fx = getTorque(m_fL)*Math.cos(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.cos(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.cos(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.cos(m_backRightModule.getSteerAngle());
     double fy = getTorque(m_fL)*Math.sin(m_frontLeftModule.getSteerAngle())+getTorque(m_fR)*Math.sin(m_frontRightModule.getSteerAngle())+getTorque(m_bL)*Math.sin(m_backLeftModule.getSteerAngle())+getTorque(m_bR)*Math.sin(m_backRightModule.getSteerAngle());
     return (Math.sqrt(fx*fx+fy*fy)/DRIVETRAIN_WHEELRADIUS_METERS)*SdsModuleConfigurations.MK4I_L2.getDriveReduction();
-  }
+  }*/
 }

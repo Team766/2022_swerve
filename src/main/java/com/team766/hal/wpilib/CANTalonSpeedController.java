@@ -4,21 +4,20 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.team766.hal.CANSpeedController;
 import com.team766.logging.Category;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.team766.logging.Logger;
 import com.team766.logging.LoggerExceptionUtils;
 import com.team766.logging.Severity;
 
-public class CANTalonFxSpeedController extends BaseCTRESpeedController implements CANSpeedController {
+public class CANTalonSpeedController extends BaseCTRESpeedController implements CANSpeedController {
 
-	private WPI_TalonFX m_device;
+	private WPI_TalonSRX m_device;
 	private double m_feedForward = 0.0;
 
-	public CANTalonFxSpeedController(int deviceNumber) {
-		m_device = new WPI_TalonFX(deviceNumber);
+	public CANTalonSpeedController(int deviceNumber) {
+		m_device = new WPI_TalonSRX(deviceNumber);
 	}
 
 	@Override
@@ -54,6 +53,9 @@ public class CANTalonFxSpeedController extends BaseCTRESpeedController implement
 		case MotionProfileArc:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.MotionProfileArc;
 			break;
+		case Voltage:
+			m_device.setVoltage(value);
+			return;
 		case Disabled:
 			ctre_mode = com.ctre.phoenix.motorcontrol.ControlMode.Disabled;
 			useFourTermSet = false;
@@ -76,11 +78,7 @@ public class CANTalonFxSpeedController extends BaseCTRESpeedController implement
 	public void stopMotor() {
 		m_device.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, 0);
 	}
-	@Override
-	public void setCurrentLimit(double ampsLimit) {
-		errorCodeToException(ExceptionTarget.LOG, m_device.configSupplyCurrentLimit(
-			new SupplyCurrentLimitConfiguration(true, ampsLimit, 0, 0.01)));
-	}
+
 	@Override
 	public double getSensorPosition() {
 		return m_device.getSelectedSensorPosition(0);
@@ -153,6 +151,14 @@ public class CANTalonFxSpeedController extends BaseCTRESpeedController implement
 	}
 
 	@Override
+	public void setCurrentLimit(double ampsLimit) {
+		errorCodeToException(ExceptionTarget.LOG, m_device.configPeakCurrentLimit(0));
+		errorCodeToException(ExceptionTarget.LOG, m_device.configPeakCurrentDuration(10));
+		errorCodeToException(ExceptionTarget.LOG, m_device.configContinuousCurrentLimit((int)ampsLimit));
+		m_device.enableCurrentLimit(true);
+	}
+
+	@Override
 	public void restoreFactoryDefault() {
 		errorCodeToException(ExceptionTarget.LOG, m_device.configFactoryDefault());
 	}
@@ -181,17 +187,5 @@ public class CANTalonFxSpeedController extends BaseCTRESpeedController implement
 	public void setNeutralMode(NeutralMode neutralMode) {
 		m_device.setNeutralMode(neutralMode);
 	}
-
-	@Override
-	public double getMotorOutputPercent(){ return m_device.getMotorOutputPercent(); }
-
-	@Override 
-	public double getMotorOutputVoltage(){ return m_device.getMotorOutputVoltage(); }
-
-	@Override
-	public double getOutputCurrent(){ return m_device.getOutputCurrent(); }
-
-	@Override
-	public double getTemperature(){ return m_device.getTemperature(); }
 	
 }

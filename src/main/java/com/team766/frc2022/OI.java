@@ -32,21 +32,23 @@ public class OI extends Procedure {
 		while (true) {
 			// Add driver controls here - make sure to take/release ownership
 			// of mechanisms when appropriate.
+			log("anything happening?");
+			System.out.println("Code?");
 			double x_raw = deadband(m_joystick0.getAxis(0), deadband);
 			double y_raw = deadband(m_joystick0.getAxis(1), deadband);
 			double rotation = deadband(m_joystick1.getAxis(0), deadband);
 			Robot.drive.setSwerve(ChassisSpeeds.fromFieldRelativeSpeeds(x_raw, y_raw, rotation, Rotation2d.fromDegrees(Robot.gyro.getFusedHeading())));
-			if(m_joystick0.getButton(1) || m_joystick1.getButton(1)){ //check if the button I think is the trigger is pressed. If it is, do an anti-pin
+			/*if(m_joystick0.getButton(1) || m_joystick1.getButton(1)){ //check if the button I think is the trigger is pressed. If it is, do an anti-pin
 				Rotation2d net_force_direction = Robot.drive.netForceDirection();
 				Robot.drive.swerveWheelTurn(net_force_direction.plus(Rotation2d.fromDegrees(90)));
 			}
-
+			*/
 			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
 	}
 
 	public double deadband(double value, double deadband){
-		if (Math.abs(value) > deadband) {
+		/*if (Math.abs(value) > deadband) {
 		if (value > 0.0) {
 			return (value - deadband) / (1.0 - deadband);
 		} else {
@@ -54,6 +56,7 @@ public class OI extends Procedure {
 		}
 		} else {
 		return 0.0;
-		}
+		}*/
+		return value;
 	}
 }
