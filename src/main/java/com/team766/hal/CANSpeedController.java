@@ -21,6 +21,7 @@ public interface CANSpeedController extends SpeedController {
 		PercentOutput,
 		Position,
 		Velocity,
+		Voltage,
 		Current,
 		Follower,
 		MotionProfile,
@@ -100,6 +101,8 @@ public interface CANSpeedController extends SpeedController {
 	void setSensorInverted(boolean inverted);
 
 	void setOutputRange(double minOutput, double maxOutput);
+
+	void setCurrentLimit (double ampsLimit);
 
 	void restoreFactoryDefault();
 
