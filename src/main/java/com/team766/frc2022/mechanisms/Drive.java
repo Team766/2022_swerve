@@ -43,7 +43,7 @@ public class Drive extends Mechanism {
 	private double gyroValue;
 
 	private static PointDir currentPosition;
-	private static double wheelDistance;
+	private static final double WHEEL_DISTANCE = 11.0446616728 * 2.54;
 
 	private static double prevBackLeft;
 	private static double prevBackRight;
@@ -57,6 +57,8 @@ public class Drive extends Mechanism {
 
 	public static double avgX;
 	public static double avgY;
+	public static final double GEAR_RATIO = 6.75;
+	public static final int ENCODER_TO_REVOLUTION_CONSTANT = 2048;
 	
 	public Drive() {
 		
@@ -118,7 +120,6 @@ public class Drive extends Mechanism {
 		configPID();
 
 		//Circumference of each wheel, in centimeters
-		wheelDistance = 11.0446616728 * 2.54; 
 		currentPosition = new PointDir(0, 0, 0);
 	}
 	//If you want me to repeat code, then no.
@@ -416,8 +417,8 @@ public void turning(double Joystick){
 	@Override
 	public void run() {
 		setCurrentWheelPositions();
-		avgX = ((currBackLeft - prevBackLeft) * Math.cos(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.cos(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.cos(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.cos(Math.toRadians(getFrontRight() + gyroValue))) * wheelDistance / (4 * 6.75 * 2048);
-		avgY = ((currBackLeft - prevBackLeft) * Math.sin(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.sin(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.sin(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.sin(Math.toRadians(getFrontRight() + gyroValue))) * wheelDistance / (4 * 6.75 * 2048);
+		avgX = ((currBackLeft - prevBackLeft) * Math.cos(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.cos(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.cos(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.cos(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
+		avgY = ((currBackLeft - prevBackLeft) * Math.sin(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.sin(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.sin(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.sin(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
 		currentPosition.set(currentPosition.getX() + avgX, currentPosition.getY() + avgY, gyroValue);
 		log("Current Position: " + currentPosition.toString() + " " + getBackLeft() + " " + getBackRight() + " " + getFrontLeft() + " " + getFrontRight());
 	}
