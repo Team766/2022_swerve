@@ -43,6 +43,8 @@ public class Drive extends Mechanism {
 	private double gyroValue;
 
 	private static PointDir currentPosition;
+
+	//Uses centimeters
 	private static final double WHEEL_DISTANCE = 11.0446616728 * 2.54;
 
 	private static double prevBackLeft;
@@ -413,7 +415,7 @@ public void turning(double Joystick){
 		currFrontRight = m_DriveFrontRight.getSensorPosition();
 	}
 
-	//Odometry: Uses centimeters
+	//Odometry
 	@Override
 	public void run() {
 		setCurrentWheelPositions();
