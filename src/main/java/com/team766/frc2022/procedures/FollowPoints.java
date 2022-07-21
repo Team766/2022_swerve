@@ -113,10 +113,9 @@ public class FollowPoints extends Procedure {
 		context.takeOwnership(Robot.drive);
 		context.takeOwnership(Robot.gyro);
 		log("Starting FollowPoints");
-		/*for (int i = 0; i < pointList.length; i++) {
+		for (int i = 0; i < pointList.length; i++) {
 			log(pointList[i].toString());
-		}*/
-		log(pointList.length);
+		}
 		if (pointList.length > 0) {
 			int targetNum = 0;
 			Point targetPoint = new Point(0.0, 0.0);

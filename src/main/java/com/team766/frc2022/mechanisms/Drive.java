@@ -7,6 +7,7 @@ import com.team766.hal.CANSpeedController.ControlMode;
 import com.team766.hal.mock.Joystick;
 import com.team766.hal.simulator.Encoder;
 import com.team766.hal.CANSpeedController;
+import com.team766.library.RateLimiter;
 import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
 import com.team766.config.ConfigFileReader;
@@ -61,6 +62,8 @@ public class Drive extends Mechanism {
 	public static double avgY;
 	public static final double GEAR_RATIO = 6.75;
 	public static final int ENCODER_TO_REVOLUTION_CONSTANT = 2048;
+
+	RateLimiter odometryLimiter;
 	
 	public Drive() {
 		
@@ -123,6 +126,8 @@ public class Drive extends Mechanism {
 
 		//Circumference of each wheel, in centimeters
 		currentPosition = new PointDir(0, 0, 0);
+
+		odometryLimiter = new RateLimiter(0.02);
 	}
 	//If you want me to repeat code, then no.
 	public double pythagrian(double x, double y) {
@@ -418,11 +423,13 @@ public void turning(double Joystick){
 	//Odometry
 	@Override
 	public void run() {
-		setCurrentWheelPositions();
-		avgX = ((currBackLeft - prevBackLeft) * Math.cos(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.cos(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.cos(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.cos(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
-		avgY = ((currBackLeft - prevBackLeft) * Math.sin(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.sin(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.sin(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.sin(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
-		currentPosition.set(currentPosition.getX() + avgX, currentPosition.getY() + avgY, gyroValue);
-		log("Current Position: " + currentPosition.toString() + " " + getBackLeft() + " " + getBackRight() + " " + getFrontLeft() + " " + getFrontRight());
+		if (odometryLimiter.next()) {
+			setCurrentWheelPositions();
+			avgX = ((currBackLeft - prevBackLeft) * Math.cos(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.cos(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.cos(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.cos(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
+			avgY = ((currBackLeft - prevBackLeft) * Math.sin(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.sin(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.sin(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.sin(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
+			currentPosition.set(currentPosition.getX() + avgX, currentPosition.getY() + avgY, gyroValue);
+			log("Current Position: " + currentPosition.toString() + " " + getBackLeft() + " " + getBackRight() + " " + getFrontLeft() + " " + getFrontRight());
+		}
 	}
 }
 
