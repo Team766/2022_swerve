@@ -111,6 +111,12 @@ public class FollowPoints extends Procedure {
 
 	public void run(Context context) {
 		context.takeOwnership(Robot.drive);
+		context.takeOwnership(Robot.gyro);
+		log("Starting FollowPoints");
+		/*for (int i = 0; i < pointList.length; i++) {
+			log(pointList[i].toString());
+		}*/
+		log(pointList.length);
 		if (pointList.length > 0) {
 			int targetNum = 0;
 			Point targetPoint = new Point(0.0, 0.0);
@@ -136,7 +142,9 @@ public class FollowPoints extends Procedure {
 				} else {
 					turning = p_turningController.getOutput();
 				}
+				Robot.drive.setGyro(Robot.gyro.getGyroYaw());
 				Robot.drive.swerveDrive(new PointDir(currentPos.getUnitVector(targetPoint), turning));
+				log(new PointDir(currentPos.getUnitVector(targetPoint), turning).toString());
 
 				context.yield();
 			}
