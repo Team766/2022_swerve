@@ -89,6 +89,8 @@ public class Robot extends MyRobot {
 	@Override
 	public void autonomousInit() {
 		if (m_oiContext != null) {
+			Logger.get(Category.PROCEDURES).logRaw(Severity.ERROR, "Stopping OI context");
+
 			m_oiContext.stop();
 			m_oiContext = null;
 		}
@@ -106,8 +108,10 @@ public class Robot extends MyRobot {
 			m_autonomous.stop();
 			m_autonomous = null;
 		}
-		
+
+		Logger.get(Category.PROCEDURES).logRaw(Severity.ERROR, "Entering OI mode");
 		if (m_oiContext == null) {
+			Logger.get(Category.PROCEDURES).logRaw(Severity.ERROR, "Starting OI context");
 			m_oiContext = Scheduler.getInstance().startAsync(m_oi);
 		}
 	}

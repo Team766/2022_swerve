@@ -10,6 +10,7 @@ import com.team766.hal.CANSpeedController;
 import com.team766.library.RateLimiter;
 import com.team766.library.ValueProvider;
 import com.team766.logging.Category;
+import com.team766.simulator.ProgramInterface.RobotMode;
 import com.team766.config.ConfigFileReader;
 import com.team766.framework.Mechanism;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -127,7 +128,7 @@ public class Drive extends Mechanism {
 		//Circumference of each wheel, in centimeters
 		currentPosition = new PointDir(0, 0, 0);
 
-		odometryLimiter = new RateLimiter(0.02);
+		odometryLimiter = new RateLimiter(0.05);
 	}
 	//If you want me to repeat code, then no.
 	public double pythagrian(double x, double y) {
