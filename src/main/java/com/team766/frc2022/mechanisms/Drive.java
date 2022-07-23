@@ -271,7 +271,7 @@ public class Drive extends Mechanism {
 	}
 
 	public void swerveDrive(PointDir joystick) {
-		swerveDrive(joystick.getX(), joystick.getY(), joystick.getHeading());
+		swerveDrive(joystick.getY(), -1 * joystick.getX(), joystick.getHeading());
 	}
 	    
 public void turning(double Joystick){

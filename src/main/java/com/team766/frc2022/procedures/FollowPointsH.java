@@ -15,7 +15,8 @@ public class FollowPointsH extends Procedure {
 		log("Starting FollowPointsH");
 		Point[] pointList = {
 			new Point(0, 0), 
-			new Point(100, 0) 
+			new Point(100, 0),
+			new Point(100, -100)
 		};
 		new FollowPoints(pointList).run(context);
 	}

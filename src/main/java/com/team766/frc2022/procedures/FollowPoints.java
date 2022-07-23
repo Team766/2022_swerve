@@ -113,6 +113,8 @@ public class FollowPoints extends Procedure {
 		context.takeOwnership(Robot.drive);
 		context.takeOwnership(Robot.gyro);
 		log("Starting FollowPoints");
+		Robot.drive.resetCurrentPosition();
+		Robot.gyro.resetGyro();
 		for (int i = 0; i < pointList.length; i++) {
 			log(pointList[i].toString());
 		}
@@ -142,8 +144,10 @@ public class FollowPoints extends Procedure {
 					turning = p_turningController.getOutput();
 				}
 				Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-				Robot.drive.swerveDrive(new PointDir(currentPos.getUnitVector(targetPoint), turning));
-				log(new PointDir(currentPos.getUnitVector(targetPoint), turning).toString());
+				Robot.drive.swerveDrive(new PointDir(currentPos.scaleVector(targetPoint, 0.25), turning));
+				log("Current Position: " + currentPos.toString());
+				log("Target Point: " + targetPoint.toString());
+				log("Unit Vector: " + new PointDir(currentPos.scaleVector(targetPoint, 0.25), turning).toString());
 
 				context.yield();
 			}
