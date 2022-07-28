@@ -29,6 +29,14 @@ public class Point extends Loggable {
 		this.y = y;
 	}
 
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double x) {
+		this.y = y;
+	}
+
 	public double distance(Point a) {
 		return Math.sqrt(Math.pow(a.getX() - getX(), 2.0) + Math.pow(a.getY() - getY(), 2.0));
 	}

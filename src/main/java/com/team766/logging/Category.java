@@ -13,7 +13,7 @@ public enum Category {
 	CONFIGURATION,
 	PROCEDURES,
 	OPERATOR_INTERFACE,
-	ELEVATOR,
+	ODOMETRY,
 	LIMELIGHT;
 	
 	private static final Category[] VALUES = Category.values();

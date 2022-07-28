@@ -19,6 +19,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.team766.frc2022.Point;
 import com.team766.frc2022.PointDir;
+import com.team766.library.Odometry;
 
 
 public class Drive extends Mechanism {
@@ -46,25 +47,9 @@ public class Drive extends Mechanism {
 
 	private static PointDir currentPosition;
 
-	//Uses centimeters
-	private static final double WHEEL_DISTANCE = 11.0446616728 * 2.54;
-
-	private static double prevBackLeft;
-	private static double prevBackRight;
-	private static double prevFrontLeft;
-	private static double prevFrontRight;
-
-	private static double currBackLeft;
-	private static double currBackRight;
-	private static double currFrontLeft;
-	private static double currFrontRight;
-
-	public static double avgX;
-	public static double avgY;
-	public static final double GEAR_RATIO = 6.75;
-	public static final int ENCODER_TO_REVOLUTION_CONSTANT = 2048;
-
-	RateLimiter odometryLimiter;
+	CANSpeedController[] motorList;
+	CANCoder[] CANCoderList;
+	Odometry swerveOdometry;
 	
 	public Drive() {
 		
@@ -125,10 +110,10 @@ public class Drive extends Mechanism {
 		m_SteerBackLeft.setSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		configPID();
 
-		//Circumference of each wheel, in centimeters
 		currentPosition = new PointDir(0, 0, 0);
-
-		odometryLimiter = new RateLimiter(0.05);
+		motorList = new CANSpeedController[]{m_DriveFrontRight, m_DriveFrontLeft, m_DriveBackRight, m_DriveBackLeft};
+		CANCoderList = new CANCoder[]{e_FrontRight, e_FrontLeft, e_BackRight, e_BackLeft};
+		swerveOdometry = new Odometry(motorList, CANCoderList, 0.05);
 	}
 	//If you want me to repeat code, then no.
 	public double pythagrian(double x, double y) {
@@ -395,11 +380,7 @@ public void turning(double Joystick){
 	}
 
 	public void resetCurrentPosition() {
-		currentPosition.set(0.0, 0.0);
-		prevBackLeft = 0;
-		prevBackRight = 0;
-		prevFrontLeft = 0;
-		prevFrontRight = 0;
+		swerveOdometry.resetCurrentPosition();
 	}
 
 	public void resetDriveEncoders() {
@@ -409,28 +390,10 @@ public void turning(double Joystick){
 		m_DriveFrontRight.setPosition(0);
 	}
 
-	public void setCurrentWheelPositions() {
-		prevBackLeft = currBackLeft;
-		prevBackRight = currBackRight;
-		prevFrontLeft = currFrontLeft;
-		prevFrontRight = currFrontRight;
-
-		currBackLeft = m_DriveBackLeft.getSensorPosition();
-		currBackRight = m_DriveBackRight.getSensorPosition();
-		currFrontLeft = m_DriveFrontLeft.getSensorPosition();
-		currFrontRight = m_DriveFrontRight.getSensorPosition();
-	}
-
 	//Odometry
 	@Override
 	public void run() {
-		if (odometryLimiter.next()) {
-			setCurrentWheelPositions();
-			avgX = ((currBackLeft - prevBackLeft) * Math.cos(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.cos(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.cos(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.cos(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
-			avgY = ((currBackLeft - prevBackLeft) * Math.sin(Math.toRadians(getBackLeft() + gyroValue)) + (currBackRight - prevBackRight) * Math.sin(Math.toRadians(getBackRight() + gyroValue)) + (currFrontLeft - prevFrontLeft) * Math.sin(Math.toRadians(getFrontLeft() + gyroValue)) + (currFrontRight - prevFrontRight) * Math.sin(Math.toRadians(getFrontRight() + gyroValue))) * WHEEL_DISTANCE / (4 * GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT);
-			currentPosition.set(currentPosition.getX() + avgX, currentPosition.getY() + avgY, gyroValue);
-			log("Current Position: " + currentPosition.toString() + " " + getBackLeft() + " " + getBackRight() + " " + getFrontLeft() + " " + getFrontRight());
-		}
+		currentPosition = swerveOdometry.run();
 	}
 }
 
