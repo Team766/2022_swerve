@@ -58,4 +58,8 @@ public class PointDir extends Point {
 	public String toString() {
 		return super.toString() + " Heading: " + getHeading();
 	}
+
+	public PointDir clone() {
+		return new PointDir(getX(), getY(), getHeading());
+	}
 }

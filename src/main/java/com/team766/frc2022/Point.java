@@ -33,7 +33,7 @@ public class Point extends Loggable {
 		this.x = x;
 	}
 
-	public void setY(double x) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
