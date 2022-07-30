@@ -10,7 +10,10 @@ import com.team766.frc2022.Robot;
 public class Odometry extends Loggable {
 
 	private RateLimiter odometryLimiter;
+
+	//Each successive motor should be adjacent to previous on robot
 	private CANSpeedController[] motorList;
+	//The order of CANCoders should be the same as in motorList
 	private CANCoder[] CANCoderList;
 	private	int motorCount; 
 

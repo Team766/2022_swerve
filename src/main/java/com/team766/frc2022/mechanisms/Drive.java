@@ -111,8 +111,8 @@ public class Drive extends Mechanism {
 		configPID();
 
 		currentPosition = new PointDir(0, 0, 0);
-		motorList = new CANSpeedController[]{m_DriveFrontRight, m_DriveFrontLeft, m_DriveBackRight, m_DriveBackLeft};
-		CANCoderList = new CANCoder[]{e_FrontRight, e_FrontLeft, e_BackRight, e_BackLeft};
+		motorList = new CANSpeedController[]{m_DriveFrontRight, m_DriveFrontLeft, m_DriveBackLeft, m_DriveBackRight};
+		CANCoderList = new CANCoder[]{e_FrontRight, e_FrontLeft, e_BackLeft, e_BackRight};
 		swerveOdometry = new Odometry(motorList, CANCoderList, 0.05);
 	}
 	//If you want me to repeat code, then no.
