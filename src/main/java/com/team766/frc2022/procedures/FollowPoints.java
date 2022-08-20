@@ -15,6 +15,9 @@ import com.team766.controllers.PIDController;
  
 public class FollowPoints extends Procedure {
 
+	public void goToPoint(Point dest){
+
+	}
 	@Override
 	public void run(Context context) {
 		// TODO Auto-generated method stub

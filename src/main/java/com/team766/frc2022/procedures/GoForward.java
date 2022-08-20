@@ -12,42 +12,56 @@ public class GoForward extends Procedure {
 		context.takeOwnership(Robot.drive);
 		context.takeOwnership(Robot.gyro);
 		loggerCategory = Category.AUTONOMOUS;
-		forward();
+		log("Something is happening");
+		Robot.drive.resetCurrentPosition();
+		double x = Robot.drive.getCurrentPosition().getX();
+		PIDController pid_x = new PIDController(0.1, 0, 0, -1, 1, 0.05);
+		pid_x.setSetpoint(1);
+		while(true){
+			x = Robot.drive.getCurrentPosition().getX();
+			log("X: " + x);
+			pid_x.calculate(x, true);
+			Robot.drive.setGyro(Robot.gyro.getGyroYaw());
+			log("Output: " + pid_x.getOutput());
+			Robot.drive.swerveDrive(pid_x.getOutput(), 0, 0);
+			log("Error: %f", pid_x.getCurrentError());
+		}
 	}
+
 	public void forward(){
 		double x = Robot.drive.getCurrentPosition().getX();
-		PIDController p_pid = new PIDController(1, 0, 0, -1, 1, 0.05);
-		p_pid.setSetpoint(1);
-		while(!p_pid.isDone()){
+		PIDController pid_x = new PIDController(1, 0, 0, -1, 1, 0.05);
+		pid_x.setSetpoint(1);
+		while(!pid_x.isDone()){
 			x = Robot.drive.getCurrentPosition().getX();
-			p_pid.calculate(x, true);
+			pid_x.calculate(x, true);
 			Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-			Robot.drive.swerveDrive(p_pid.getOutput(), 0, 0);
-			log("Error: " + p_pid.getCurrentError());
+			Robot.drive.swerveDrive(pid_x.getOutput(), 0, 0);
+			log("Error: %f", pid_x.getCurrentError());
 		}
 	}
 	public void side(){
 		double y = Robot.drive.getCurrentPosition().getY();
-		PIDController p_pid = new PIDController(1, 0, 0, -1, 1, 0.05);
-		p_pid.setSetpoint(1);
-		while(!p_pid.isDone()){
+		PIDController pid_y = new PIDController(1, 0, 0, -1, 1, 0.05);
+		pid_y.setSetpoint(1);
+		while(!pid_y.isDone()){
 			y = Robot.drive.getCurrentPosition().getY();
-			p_pid.calculate(y, true);
+			pid_y.calculate(y, true);
 			Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-			Robot.drive.swerveDrive(0, p_pid.getOutput(), 0);
-			log("Error: " + p_pid.getCurrentError());
+			Robot.drive.swerveDrive(0, pid_y.getOutput(), 0);
+			log("Error: " + pid_y.getCurrentError());
 		}
 	}
 	public void rotate(){
-		double Θ = Robot.drive.getCurrentPosition().getHeading();
-		PIDController p_pid = new PIDController(1, 0, 0, -1, 1, 0.05);
-		p_pid.setSetpoint(90);
-		while(!p_pid.isDone()){
-			Θ = Robot.drive.getCurrentPosition().getHeading();
-			p_pid.calculate(Θ, true);
+		double H = Robot.drive.getCurrentPosition().getH();
+		PIDController pid_H = new PIDController(1, 0, 0, -1, 1, 0.05);
+		pid_H.setSetpoint(90);
+		while(!pid_H.isDone()){
+			H = Robot.drive.getCurrentPosition().getH();
+			pid_H.calculate(H, true);
 			Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-			Robot.drive.swerveDrive(0, 0, p_pid.getOutput());
-			log("Error: " + p_pid.getCurrentError());
+			Robot.drive.swerveDrive(0, 0, pid_H.getOutput());
+			log("Error: " + pid_H.getCurrentError());
 		}
 	}
 

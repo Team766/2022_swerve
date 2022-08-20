@@ -127,7 +127,7 @@ public class Drive extends Mechanism {
 		//Circumference of each wheel, in centimeters
 		currentPosition = new PointDir(0, 0, 0);
 
-		odometryLimiter = new RateLimiter(0.02);
+		odometryLimiter = new RateLimiter(0.2);
 	}
 	//If you want me to repeat code, then no.
 	public double pythagrian(double x, double y) {
@@ -270,7 +270,7 @@ public class Drive extends Mechanism {
 	}
 
 	public void swerveDrive(PointDir joystick) {
-		swerveDrive(joystick.getX(), joystick.getY(), joystick.getHeading());
+		swerveDrive(joystick.getX(), joystick.getY(), joystick.getH());
 	}
 	    
 public void turning(double Joystick){
