@@ -40,16 +40,19 @@ public class Gyro extends Mechanism {
 		double angle = g_gyro.getRoll();
 		return angle;
 	}
+	public double getGyroX(){
+		return g_gyro.get6dQuaternion(wxyz)
+	}
 
 	@Override
 	public void run() {
-		 if (l_loggingRate.next()) {
+		/* if (l_loggingRate.next()) {
 			 gyroArray[0] = getGyroYaw();
 			 gyroArray[1] = getGyroPitch();
 			 gyroArray[2] = getGyroRoll();
 			 g_gyro.getYawPitchRoll(gyroArray);
 		 	log("Yaw: " + gyroArray[0] + "// Real yaw: " + getGyroYaw() + " || Pitch: " + gyroArray[1] + " || Roll: " + gyroArray[2]);
-		 }
+		 }*/
 	}
 
 	/*private AHRS m_gyro;

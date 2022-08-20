@@ -15,7 +15,7 @@ public class GoForward extends Procedure {
 		log("Something is happening");
 		Robot.drive.resetCurrentPosition();
 		double x = Robot.drive.getCurrentPosition().getX();
-		PIDController pid_x = new PIDController(0.1, 0, 0, -1, 1, 0.05);
+		PIDController pid_x = new PIDController(0.1, 0, 0, -1, 1, 0.5);
 		pid_x.setSetpoint(1);
 		while(true){
 			x = Robot.drive.getCurrentPosition().getX();
