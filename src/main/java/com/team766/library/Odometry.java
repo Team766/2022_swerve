@@ -26,9 +26,11 @@ public class Odometry extends Loggable {
 	private PointDir currentPosition;
 
 	//In Centimeters
-	private static final double WHEEL_DISTANCE = 11.0446616728 * 2.54;
+	private static final double WHEEL_CIRCUMFERENCE = 11.0446616728 * 2.54;
 	public static final double GEAR_RATIO = 6.75;
 	public static final int ENCODER_TO_REVOLUTION_CONSTANT = 2048;
+
+	public static final double DISTANCE_BETWEEN_WHEELS = 24 * 2.54;
 
 	public Odometry(CANSpeedController[] motors, CANCoder[] CANCoders, double rateLimiterTime) {
 		loggerCategory = Category.DRIVE;
@@ -79,18 +81,21 @@ public class Odometry extends Loggable {
 		gyroPosition = Robot.gyro.getGyroYaw();
 
 		for (int i = 0; i < motorCount; i++) {
-			prevPositions[i] = currPositions[i].clone();
+			//prevPositions[i] = currPositions[i].clone();
+			//Note: I haven't decided whether or not to add this. It assumes the wheels form a regular polygon, with the first point in the top-right
+			prevPositions[i] = new PointDir(currentPosition.getX() + 0.5 * DISTANCE_BETWEEN_WHEELS / Math.sin(Math.PI / motorCount) * Math.cos(currentPosition.getHeading() + ((Math.PI + 2 * Math.PI * i) / motorCount)), currentPosition.getY() + 0.5 * DISTANCE_BETWEEN_WHEELS / Math.sin(Math.PI / motorCount) * Math.sin(currentPosition.getHeading() + ((Math.PI + 2 * Math.PI * i) / motorCount)), currPositions[i].getHeading());
+
 			currPositions[i].setHeading(CANCoderList[i].getAbsolutePosition() + gyroPosition);
 			angleChange = currPositions[i].getHeading() - prevPositions[i].getHeading();
 			if (angleChange != 0) {
 				radius = 180 * (currEncoderValues[i] - prevEncoderValues[i]) / (Math.PI * angleChange);
 				deltaX = radius * Math.sin(Math.toRadians(angleChange));
 				deltaY = radius * (1 - Math.cos(Math.toRadians(angleChange)));
-				currPositions[i].setX(prevPositions[i].getX() + (Math.cos(Math.toRadians(prevPositions[i].getHeading())) * deltaX - Math.sin(Math.toRadians(prevPositions[i].getHeading())) * deltaY) * WHEEL_DISTANCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
-				currPositions[i].setY(prevPositions[i].getY() + (Math.sin(Math.toRadians(prevPositions[i].getHeading())) * deltaX + Math.cos(Math.toRadians(prevPositions[i].getHeading())) * deltaY) * WHEEL_DISTANCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
+				currPositions[i].setX(prevPositions[i].getX() + (Math.cos(Math.toRadians(prevPositions[i].getHeading())) * deltaX - Math.sin(Math.toRadians(prevPositions[i].getHeading())) * deltaY) * WHEEL_CIRCUMFERENCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
+				currPositions[i].setY(prevPositions[i].getY() + (Math.sin(Math.toRadians(prevPositions[i].getHeading())) * deltaX + Math.cos(Math.toRadians(prevPositions[i].getHeading())) * deltaY) * WHEEL_CIRCUMFERENCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
 			} else {
-				currPositions[i].setX(prevPositions[i].getX() + (currEncoderValues[i] - prevEncoderValues[i]) * Math.cos(Math.toRadians(prevPositions[i].getHeading())) * WHEEL_DISTANCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
-				currPositions[i].setY(prevPositions[i].getY() + (currEncoderValues[i] - prevEncoderValues[i]) * Math.sin(Math.toRadians(prevPositions[i].getHeading())) * WHEEL_DISTANCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
+				currPositions[i].setX(prevPositions[i].getX() + (currEncoderValues[i] - prevEncoderValues[i]) * Math.cos(Math.toRadians(prevPositions[i].getHeading())) * WHEEL_CIRCUMFERENCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
+				currPositions[i].setY(prevPositions[i].getY() + (currEncoderValues[i] - prevEncoderValues[i]) * Math.sin(Math.toRadians(prevPositions[i].getHeading())) * WHEEL_CIRCUMFERENCE / (GEAR_RATIO * ENCODER_TO_REVOLUTION_CONSTANT));
 			}
 		}
 	}

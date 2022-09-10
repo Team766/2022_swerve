@@ -4,6 +4,8 @@ import com.team766.logging.Category;
 import java.lang.Math;
 import com.team766.frc2022.Point;
 
+//Currently unused
+
 public class Polygon {
 	private Point[] pointList;
 	private int numOfSides;
