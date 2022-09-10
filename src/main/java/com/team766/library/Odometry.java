@@ -1,11 +1,16 @@
 package com.team766.library;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.team766.framework.Loggable;
 import com.team766.frc2022.PointDir;
-import com.team766.hal.CANSpeedController;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.team766.logging.Category;
 import com.team766.frc2022.Robot;
+import com.team766.hal.CANSpeedController;
+import com.team766.logging.Category;
 
 public class Odometry extends Loggable {
 
@@ -32,6 +37,9 @@ public class Odometry extends Loggable {
 
 	public static final double DISTANCE_BETWEEN_WHEELS = 24 * 2.54;
 
+	private String fileName;
+	private String odometryLog;
+
 	public Odometry(CANSpeedController[] motors, CANCoder[] CANCoders, double rateLimiterTime) {
 		loggerCategory = Category.DRIVE;
 
@@ -52,6 +60,9 @@ public class Odometry extends Loggable {
 			prevEncoderValues[i] = 0;
 			currEncoderValues[i] = 0;
 		}
+
+		fileName = "OdometryLog " + LocalDateTime.now().toString();
+		File OdometryLog = new File("C:\\Users\\admin\\Desktop\\" + fileName);
 	}
 
 	public String getName() {
@@ -103,11 +114,14 @@ public class Odometry extends Loggable {
 	private void findRobotPosition() {
 		double avgX = 0;
 		double avgY = 0;
+		odometryLog += LocalTime.now() + " ";
 		for (int i = 0; i < motorCount; i++) {
 			avgX += currPositions[i].getX();
 			avgY += currPositions[i].getY();
+			odometryLog += currPositions[i].toString() + " ";
 		}
 		currentPosition.set(avgX / motorCount, avgY / motorCount, gyroPosition);
+		odometryLog += currentPosition.toString() + "\n";
 	}
 
 	//Intended to be placed inside Robot.drive.run()
@@ -117,6 +131,14 @@ public class Odometry extends Loggable {
 			updateCurrentPositions();
 			findRobotPosition();
 		}
+		try {
+			FileWriter OdometryLogWriter = new FileWriter("C:\\Users\\admin\\Desktop\\" + fileName);
+			OdometryLogWriter.write(odometryLog);
+			OdometryLogWriter.close();
+		  } catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		  }
 		return currentPosition;
 	}
 }
