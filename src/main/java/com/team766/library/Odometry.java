@@ -55,7 +55,12 @@ public class Odometry extends Loggable {
 
 		currentPosition = new PointDir(0, 0, 0);
 		for (int i = 0; i < motorCount; i++) {
-			prevPositions[i].set(0,0, 0);
+			try {
+				prevPositions[i].set(0,0, 0);
+			}
+			catch (Exception e) {
+				System.out.println("Error setting previous positions");
+			}
 			currPositions[i].set(0,0, 0);
 			prevEncoderValues[i] = 0;
 			currEncoderValues[i] = 0;
