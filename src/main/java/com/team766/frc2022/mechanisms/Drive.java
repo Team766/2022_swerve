@@ -177,7 +177,7 @@ public class Drive extends Mechanism {
 		//logs();
 		//double power = pythagrian((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
 		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY)); //power = max of the two joysticks
-		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue); //clockwise angle from top part of x-axis of joystick and angle the joystick is pointed in
+		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue); //clockwise angle that the wheels are pointed in respect to top x-axis of swerve
 		log("Given angle: " + getAngle(JoystickX,JoystickY) + " || Gyro: " + gyroValue + " || New angle: " + angle);
 		//Temporary Drive code, kinda sucks
 		m_DriveFrontRight.set(power);
