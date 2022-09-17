@@ -119,6 +119,7 @@ public class Drive extends Mechanism {
 	public double pythagrian(double x, double y) {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 	}
+	//clockwise angle from top part of x-axis of joystick and angle the joystick is pointed in
 	public double getAngle(double LR, double FB){
 		return Math.toDegrees(Math.atan2(LR ,-FB));
 	}
@@ -126,11 +127,13 @@ public class Drive extends Mechanism {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
 	}
+	//angle of vector1+vector2
 	public double NewAng(double FirstMag, double FirstAng, double SecondMag, double SecondAng){
 		double FinalX = FirstMag*Math.cos(Math.toRadians(FirstAng)) + SecondMag*Math.cos(Math.toRadians(SecondAng));
 		double FinalY = FirstMag*Math.sin(Math.toRadians(FirstAng)) + SecondMag*Math.sin(Math.toRadians(SecondAng));
 		return round(Math.toDegrees(Math.atan2(FinalY,FinalX)),5);
 	}
+	//mag of vector1+vector2
 	public double NewMag(double FirstMag, double FirstAng, double SecondMag, double SecondAng){
 		double FinalX = FirstMag*Math.cos(Math.toRadians(FirstAng)) + SecondMag*Math.cos(Math.toRadians(SecondAng));
 		double FinalY = FirstMag*Math.sin(Math.toRadians(FirstAng)) + SecondMag*Math.sin(Math.toRadians(SecondAng));
@@ -144,8 +147,10 @@ public class Drive extends Mechanism {
 		  return(-1*3.0*Math.pow(-1*Joystick,2)+2.0*Math.pow(-1*Joystick,3));
 	}
 
-	
-	public static double fieldAngle(double angle, double gyro){
+	//angle = angle of the joystick, gyro = gryo angle, gyro angle = clockwise angle from top x-axis
+	//gyro-angle = angle (clockwise angle from top x-axis) that the wheel has to be in respect to forwards (of swerve, not field)
+	// (not the angle that the wheel has to turn)
+	public static double fieldAngle(double angle, double gyro){ 
 		double newAngle;
 		newAngle = angle - gyro;
 		if(newAngle < 0){
@@ -171,8 +176,8 @@ public class Drive extends Mechanism {
 		checkContextOwnership();
 		//logs();
 		//double power = pythagrian((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
-		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY));
-		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue);
+		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY)); //power = max of the two joysticks
+		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue); //clockwise angle from top part of x-axis of joystick and angle the joystick is pointed in
 		log("Given angle: " + getAngle(JoystickX,JoystickY) + " || Gyro: " + gyroValue + " || New angle: " + angle);
 		//Temporary Drive code, kinda sucks
 		m_DriveFrontRight.set(power);
