@@ -33,13 +33,13 @@ public class Odometry extends Loggable {
 	public static final double DISTANCE_BETWEEN_WHEELS = 24 * 2.54;
 
 	public Odometry(CANSpeedController[] motors, CANCoder[] CANCoders, double rateLimiterTime) {
-		loggerCategory = Category.DRIVE;
+		loggerCategory = Category.ODOMETRY;
 
 		odometryLimiter = new RateLimiter(rateLimiterTime);
 		motorList = motors;
 		CANCoderList = CANCoders;
 		motorCount = motorList.length;
-
+		log("Motor count " + motorCount);
 		prevPositions = new PointDir[motorCount];
 		currPositions = new PointDir[motorCount];
 		prevEncoderValues = new double[motorCount];
@@ -47,8 +47,8 @@ public class Odometry extends Loggable {
 
 		currentPosition = new PointDir(0, 0, 0);
 		for (int i = 0; i < motorCount; i++) {
-			prevPositions[i].set(0,0, 0);
-			currPositions[i].set(0,0, 0);
+			prevPositions[i] = new PointDir(0,0, 0);
+			currPositions[i] = new PointDir(0,0, 0);
 			prevEncoderValues[i] = 0;
 			currEncoderValues[i] = 0;
 		}

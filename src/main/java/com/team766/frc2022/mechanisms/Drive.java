@@ -113,10 +113,12 @@ public class Drive extends Mechanism {
 		currentPosition = new PointDir(0, 0, 0);
 		motorList = new CANSpeedController[]{m_DriveFrontRight, m_DriveFrontLeft, m_DriveBackLeft, m_DriveBackRight};
 		CANCoderList = new CANCoder[]{e_FrontRight, e_FrontLeft, e_BackLeft, e_BackRight};
+		log("MotorList Length: " + motorList.length);
+		log("CANCoderList Length: " + CANCoderList.length);
 		swerveOdometry = new Odometry(motorList, CANCoderList, 0.05);
 	}
 	//If you want me to repeat code, then no.
-	public double pythagrian(double x, double y) {
+	public double pythagorean(double x, double y) {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 	}
 	public double getAngle(double LR, double FB){
@@ -170,7 +172,7 @@ public class Drive extends Mechanism {
     public void drive2D(double JoystickX, double JoystickY) {
 		checkContextOwnership();
 		//logs();
-		//double power = pythagrian((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
+		//double power = pythagorean((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
 		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY));
 		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue);
 		log("Given angle: " + getAngle(JoystickX,JoystickY) + " || Gyro: " + gyroValue + " || New angle: " + angle);
@@ -394,6 +396,7 @@ public void turning(double Joystick){
 	@Override
 	public void run() {
 		currentPosition = swerveOdometry.run();
+		log (currentPosition.toString());
 	}
 }
 
