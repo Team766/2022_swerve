@@ -21,7 +21,7 @@ public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
 	public static Gyro gyro;
-	
+	public static Orch orch;
 	private static OI m_oi;
 	
 	private WebServer m_webServer;
@@ -50,6 +50,7 @@ public class Robot extends MyRobot {
 		// Initialize mechanisms here
 		drive = new Drive();
 		gyro = new Gyro();
+		orch = new Orch();
 		m_oi = new OI();
 	}
 	

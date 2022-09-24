@@ -16,11 +16,9 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
-
 public class Drive extends Mechanism {
 	public final ValueProvider<Double> LENGTH_OF_CHASSIS = ConfigFileReader.getDouble("LENGTH_OF_CHASSIS");
 	public final ValueProvider<Double> WIDTH_OF_CHASSIS = ConfigFileReader.getDouble("WIDTH_OF_CHASSIS");
-
 	private CANSpeedController m_DriveFrontRight;
     private CANSpeedController m_DriveFrontLeft;
 	private CANSpeedController m_DriveBackRight;

@@ -36,13 +36,15 @@ public class OI extends Procedure {
 		double prev_time = RobotProvider.instance.getClock().getTime();
 		context.takeOwnership(Robot.gyro);
 		context.takeOwnership(Robot.drive);
+		context.takeOwnership(Robot.orch);
 		//Robot.gyro.resetGyro();
-		Robot.drive.setFrontRightEncoders();
-		Robot.drive.setFrontLeftEncoders();
-		Robot.drive.setBackRightEncoders();
-		Robot.drive.setBackLeftEncoders();
-		
-		while (true) {
+		if(m_rightJoystick.getButtonPressed(1)){
+			Robot.orch.loadSong();
+		}
+		if(m_rightJoystick.getButtonPressed(2)){
+			Robot.orch.play();
+		}
+		/*while (true) {
 			//log(getAngle(m_leftJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT) ,m_leftJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)));
 			if(m_rightJoystick.getButton(2)){
 				Robot.drive.setGyro(0);
@@ -101,7 +103,7 @@ public class OI extends Procedure {
 				Robot.drive.stopSteerMotors();
 				}
 			}*/
-			if(m_leftJoystick.getButtonPressed(1))
+			/*if(m_leftJoystick.getButtonPressed(1))
 				Robot.gyro.resetGyro();
 			
 			if(m_leftJoystick.getButtonPressed(2)){
@@ -115,7 +117,7 @@ public class OI extends Procedure {
 			// } else {
 			// 	turningValue = 0;
 			// }
-			if(Math.abs(LeftJoystick_X)+
+			/*if(Math.abs(LeftJoystick_X)+
 			Math.abs(LeftJoystick_Y)+  Math.abs(RightJoystick_X) > 0){
 			Robot.drive.swerveDrive( 
 				(LeftJoystick_X),
@@ -125,9 +127,9 @@ public class OI extends Procedure {
 				Robot.drive.stopDriveMotors();
 				Robot.drive.stopSteerMotors();				
 			}
-
+			*/
 			double cur_time = RobotProvider.instance.getClock().getTime();
 				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
-		}
+		
 	}
 }
