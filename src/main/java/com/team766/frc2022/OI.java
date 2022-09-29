@@ -130,6 +130,11 @@ public class OI extends Procedure {
 				Robot.drive.resetCurrentPosition();
 			}
 
+			if (m_rightJoystick.getButtonPressed(11)) {
+				context.takeOwnership(Robot.drive);
+				new FollowPoints().run(context);
+			}
+
 			double cur_time = RobotProvider.instance.getClock().getTime();
 				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
