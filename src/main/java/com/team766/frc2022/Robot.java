@@ -21,6 +21,7 @@ public class Robot extends MyRobot {
 	// Declare mechanisms here
 	public static Drive drive;
 	public static Gyro gyro;
+	public static Elevator elevator;
 	
 	private static OI m_oi;
 	
