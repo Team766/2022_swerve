@@ -52,6 +52,7 @@ public class Robot extends MyRobot {
 		drive = new Drive();
 		gyro = new Gyro();
 		m_oi = new OI();
+		elevator = new Elevator();
 	}
 	
 	@Override
