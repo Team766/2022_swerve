@@ -16,7 +16,7 @@ import com.team766.logging.Category;
 public class OI extends Procedure {
 	private JoystickReader m_leftJoystick;
 	private JoystickReader m_rightJoystick;
-	private JoystickReader m_ControlPanel;
+	//private JoystickReader m_ControlPanel;
 	private double RightJoystick_X = 0;
 	private double RightJoystick_Y = 0;
 	private double RightJoystick_Z = 0;
@@ -31,7 +31,7 @@ public class OI extends Procedure {
 
 		m_leftJoystick = RobotProvider.instance.getJoystick(0);
 		m_rightJoystick = RobotProvider.instance.getJoystick(1);
-		m_ControlPanel = RobotProvider.instance.getJoystick(12);
+		//m_ControlPanel = RobotProvider.instance.getJoystick(12);
 	}
 
 	public void run(Context context) {
@@ -137,6 +137,7 @@ public class OI extends Procedure {
 				new FollowPoints().run(context);
 			}
 
+			/*
 			if (m_ControlPanel.getButton(InputConstants.CONTROL_PANEL_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(1);
@@ -160,7 +161,30 @@ public class OI extends Procedure {
 				context.releaseOwnership(Robot.elevator);
 				log("down stop");
 			} 
+			*/
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON) || m_leftJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setElevatorPower(1);
+				context.releaseOwnership(Robot.elevator);
+				log("UP");
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON) || m_leftJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setElevatorPower(0);
+				context.releaseOwnership(Robot.elevator);
+				log("UP Stop");
+			} 
 
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON) || m_leftJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setElevatorPower(-1);
+				context.releaseOwnership(Robot.elevator);
+				log("Down");
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON) || m_leftJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setElevatorPower(0);
+				context.releaseOwnership(Robot.elevator);
+				log("down stop");
+			} 
 			double cur_time = RobotProvider.instance.getClock().getTime();
 				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
