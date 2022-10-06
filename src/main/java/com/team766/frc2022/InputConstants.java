@@ -15,11 +15,19 @@ public final class InputConstants {
 	//Navigation
 	public static final int AXIS_LEFT_RIGHT = 0;
 	public static final int AXIS_FORWARD_BACKWARD = 1;
-	public static final int AXIS_TWIST =3;
+	public static final int AXIS_TWIST = 3;
+
 	// Joystick buttons
 	public static final int CROSS_DEFENSE = 7; 
-	// Elevator Buttons: edit these 
-	//CHANGE THE BUTTONS
+	public static final int JOYSTICK_FAST_TURNING = 1;
+	public static final int JOYSTICK_RESET_GYRO = 2;
+	public static final int JOYSTICK_RESET_CURRENT_POSITION = 11;
+	public static final int JOYSTICK_FOLLOW_POINTS = 16;
+
+	// Elevator Buttons
 	public static final int JOYSTICK_ELEVATOR_UP_BUTTON = 3;
 	public static final int JOYSTICK_ELEVATOR_DOWN_BUTTON = 4;
+	public static final int JOYSTICK_ARMS_BACKWARDS_BUTTON = 3;
+	public static final int JOYSTICK_ARMS_FORWARDS_BUTTON = 4;
+	public static final int JOYSTICK_RESET_ELEVATOR = 2;
 }

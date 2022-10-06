@@ -59,7 +59,7 @@ public class OI extends Procedure {
 			}
 			if(Math.abs(m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT)) > 0.05){
 				RightJoystick_X = m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT)/2;
-				if(m_rightJoystick.getButton(1)){
+				if(m_rightJoystick.getButton(InputConstants.JOYSTICK_FAST_TURNING)){
 					RightJoystick_X *= 2;
 				}	
 			} else {
@@ -104,7 +104,7 @@ public class OI extends Procedure {
 				Robot.drive.stopSteerMotors();
 				}
 			}*/
-			if(m_rightJoystick.getButtonPressed(2))
+			if(m_rightJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_GYRO))
 				Robot.gyro.resetGyro();
 			
 			/*if(m_leftJoystick.getButtonPressed(2)){
@@ -129,11 +129,11 @@ public class OI extends Procedure {
 				Robot.drive.stopSteerMotors();				
 			}
 
-			if (m_leftJoystick.getButtonPressed(11)) {
+			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_CURRENT_POSITION)) {
 				Robot.drive.resetCurrentPosition();
 			}
 
-			if (m_leftJoystick.getButtonPressed(16)) {
+			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_FOLLOW_POINTS)) {
 				context.takeOwnership(Robot.drive);
 				new FollowPoints().run(context);
 			}
@@ -187,17 +187,17 @@ public class OI extends Procedure {
 				log("down stop");
 			} 
 
-			if (m_leftJoystick.getButtonPressed(3)) {
+			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_ARMS_BACKWARDS_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setArmsPower(1);
 				context.releaseOwnership(Robot.elevator);
-			} else if (m_leftJoystick.getButtonPressed(4)) {
+			} else if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_ARMS_FORWARDS_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setArmsPower(-1);
 				context.releaseOwnership(Robot.elevator);
 			}
 
-			if (m_leftJoystick.getButtonPressed(2)) {
+			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_ELEVATOR)) {
 				log("Activated");
 				context.startAsync(new ResetElevator());
 			}
