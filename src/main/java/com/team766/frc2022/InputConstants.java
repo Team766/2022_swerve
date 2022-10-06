@@ -19,6 +19,6 @@ public final class InputConstants {
 	// Joystick buttons
 	public static final int CROSS_DEFENSE = 7; 
 	// Elevator buttons: edit these
-	public static final int CONTROL_PANEL_ELEVATOR_UP_BUTTON = 0;
-	public static final int CONTROL_PANEL_ELEVATOR_DOWN_BUTTON = 0;
+	public static final int CONTROL_PANEL_ELEVATOR_UP_BUTTON = 7;
+	public static final int CONTROL_PANEL_ELEVATOR_DOWN_BUTTON = 8;
 }
