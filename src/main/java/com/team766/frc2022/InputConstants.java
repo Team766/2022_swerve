@@ -20,6 +20,6 @@ public final class InputConstants {
 	public static final int CROSS_DEFENSE = 7; 
 	// Elevator Buttons: edit these 
 	//CHANGE THE BUTTONS
-	public static final int JOYSTICK_ELEVATOR_UP_BUTTON = 1;
-	public static final int JOYSTICK_ELEVATOR_DOWN_BUTTON = 2;
+	public static final int JOYSTICK_ELEVATOR_UP_BUTTON = 3;
+	public static final int JOYSTICK_ELEVATOR_DOWN_BUTTON = 4;
 }

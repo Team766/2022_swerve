@@ -46,11 +46,12 @@ public class OI extends Procedure {
 		
 		while (true) {
 			//log(getAngle(m_leftJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT) ,m_leftJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)));
-			if(m_rightJoystick.getButton(2)){
+			/*if(m_rightJoystick.getButton(2)){
 				Robot.drive.setGyro(0);
 			}else{
 				Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-			}		
+			}*/
+			Robot.drive.setGyro(Robot.gyro.getGyroYaw());		
 			if(Math.abs(m_rightJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)) > 0.05){
 				RightJoystick_Y = m_rightJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD);
 			} else {
@@ -58,7 +59,7 @@ public class OI extends Procedure {
 			}
 			if(Math.abs(m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT)) > 0.05){
 				RightJoystick_X = m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT)/2;
-				if(m_rightJoystick.getButton(3)){
+				if(m_rightJoystick.getButton(1)){
 					RightJoystick_X *= 2;
 				}	
 			} else {
@@ -103,15 +104,15 @@ public class OI extends Procedure {
 				Robot.drive.stopSteerMotors();
 				}
 			}*/
-			if(m_leftJoystick.getButtonPressed(1))
+			if(m_rightJoystick.getButtonPressed(2))
 				Robot.gyro.resetGyro();
 			
-			if(m_leftJoystick.getButtonPressed(2)){
+			/*if(m_leftJoystick.getButtonPressed(2)){
 				Robot.drive.setFrontRightEncoders();
 				Robot.drive.setFrontLeftEncoders();
 				Robot.drive.setBackRightEncoders();
 				Robot.drive.setBackLeftEncoders();
-			}
+			}*/
 			// if(m_rightJoystick.getButton(1)){
 			// 	turningValue = m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT); 
 			// } else {
@@ -132,7 +133,7 @@ public class OI extends Procedure {
 				Robot.drive.resetCurrentPosition();
 			}
 
-			if (m_rightJoystick.getButtonPressed(11)) {
+			if (m_leftJoystick.getButtonPressed(16)) {
 				context.takeOwnership(Robot.drive);
 				new FollowPoints().run(context);
 			}
@@ -162,29 +163,45 @@ public class OI extends Procedure {
 				log("down stop");
 			} 
 			*/
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON) || m_leftJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(1);
 				context.releaseOwnership(Robot.elevator);
 				log("UP");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON) || m_leftJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(0);
 				context.releaseOwnership(Robot.elevator);
 				log("UP Stop");
 			} 
 
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON) || m_leftJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(-1);
 				context.releaseOwnership(Robot.elevator);
 				log("Down");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON) || m_leftJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(0);
 				context.releaseOwnership(Robot.elevator);
 				log("down stop");
 			} 
+
+			if (m_leftJoystick.getButtonPressed(3)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setArmsPower(1);
+				context.releaseOwnership(Robot.elevator);
+			} else if (m_leftJoystick.getButtonPressed(4)) {
+				context.takeOwnership(Robot.elevator);
+				Robot.elevator.setArmsPower(-1);
+				context.releaseOwnership(Robot.elevator);
+			}
+
+			if (m_leftJoystick.getButtonPressed(2)) {
+				log("Activated");
+				context.startAsync(new ResetElevator());
+			}
+
 			double cur_time = RobotProvider.instance.getClock().getTime();
 				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}

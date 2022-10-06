@@ -14,7 +14,8 @@ public enum Category {
 	PROCEDURES,
 	OPERATOR_INTERFACE,
 	ODOMETRY,
-	LIMELIGHT;
+	LIMELIGHT,
+	ELEVATOR;
 	
 	private static final Category[] VALUES = Category.values();
 	public static Category fromInteger(byte x) {
