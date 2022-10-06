@@ -21,4 +21,6 @@ public final class InputConstants {
 	// Elevator buttons: edit these
 	public static final int CONTROL_PANEL_ELEVATOR_UP_BUTTON = 7;
 	public static final int CONTROL_PANEL_ELEVATOR_DOWN_BUTTON = 8;
+	public static final int CONTROL_PANEL_ARMS_SWITCH = 13;
+	public static final int JOYSTICK_ELEVATOR_RESET_BUTTON = 2;
 }

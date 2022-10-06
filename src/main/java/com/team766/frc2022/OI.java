@@ -38,6 +38,7 @@ public class OI extends Procedure {
 		double prev_time = RobotProvider.instance.getClock().getTime();
 		context.takeOwnership(Robot.gyro);
 		context.takeOwnership(Robot.drive);
+
 		//Robot.gyro.resetGyro();
 		Robot.drive.setFrontRightEncoders();
 		Robot.drive.setFrontLeftEncoders();
@@ -128,6 +129,7 @@ public class OI extends Procedure {
 				Robot.drive.stopSteerMotors();				
 			}
 
+			//Elevator and Arms Stuff
 			if (m_ControlPanel.getButton(InputConstants.CONTROL_PANEL_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(1);
@@ -152,6 +154,21 @@ public class OI extends Procedure {
 				log("down stop");
 			} 
 
+			if (m_ControlPanel.getButtonPressed(InputConstants.CONTROL_PANEL_ARMS_SWITCH)) {
+				context.takeOwnership(Robot.elevator);				
+				Robot.elevator.setArmsPower(1);
+				context.releaseOwnership(Robot.elevator);
+			} else if (m_ControlPanel.getButtonReleased(InputConstants.CONTROL_PANEL_ARMS_SWITCH)) {
+				context.takeOwnership(Robot.elevator);				
+				Robot.elevator.setArmsPower(-1);
+				context.releaseOwnership(Robot.elevator);
+			}
+
+			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_ELEVATOR_RESET_BUTTON)){
+				//context.takeOwnership(Robot.shooter);
+				log("Activated");
+				context.startAsync(new ResetElevator());
+			}
 			double cur_time = RobotProvider.instance.getClock().getTime();
 				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
