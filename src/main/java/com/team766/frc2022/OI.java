@@ -163,24 +163,24 @@ public class OI extends Procedure {
 				log("down stop");
 			} 
 			*/
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(1);
+				Robot.elevator.setElevatorPower(1); 
 				context.releaseOwnership(Robot.elevator);
 				log("UP");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(0);
 				context.releaseOwnership(Robot.elevator);
 				log("UP Stop");
 			} 
 
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(-1);
 				context.releaseOwnership(Robot.elevator);
 				log("Down");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
+			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
 				context.takeOwnership(Robot.elevator);
 				Robot.elevator.setElevatorPower(0);
 				context.releaseOwnership(Robot.elevator);

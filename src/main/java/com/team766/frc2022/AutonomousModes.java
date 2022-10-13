@@ -5,7 +5,8 @@ import com.team766.frc2022.procedures.*;
 
 public enum AutonomousModes {
 	//@AutonomousProcedure(procedureClass = AutonomousMode.class) AutonomousMode,
-	// @AutonomousProcedure(procedureClass = DoNothingv2.class) DoNothingv2
 	@AutonomousProcedure(procedureClass = FollowPoints.class) FollowPoints,
-	@AutonomousProcedure(procedureClass = FollowPointsH.class) FollowPointsH
+	//@AutonomousProcedure(procedureClass = FollowPointsH.class) FollowPointsH,
+	//@AutonomousProcedure(procedureClass = Back.class) Back,
+	@AutonomousProcedure(procedureClass = DoNothing.class) DoNothing
 }

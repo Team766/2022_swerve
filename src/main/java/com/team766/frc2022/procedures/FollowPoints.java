@@ -19,8 +19,8 @@ public class FollowPoints extends Procedure {
 	private Procedure[] proceduresAtPoints;
 	private static double radius = ConfigFileReader.getInstance().getDouble("trajectory.radius").get();
 	private static double leniency = ConfigFileReader.getInstance().getDouble("trajectory.leniency").get();
-	private double finalHeader;
-	private double turning;
+	//private double finalHeader;
+	//private double turning;
 	
 	private PIDController p_turningController = new PIDController(0, 0, 0, -1, 1, 5);
 
@@ -41,7 +41,7 @@ public class FollowPoints extends Procedure {
 
 	public FollowPoints(Point[] points) {
 		pointList = points;
-		finalHeader = Robot.drive.getCurrentPosition().getHeading();
+		//finalHeader = Robot.drive.getCurrentPosition().getHeading();
 		proceduresAtPoints = new Procedure[pointList.length];
 		for (int i = 0; i < proceduresAtPoints.length; i++) {
 			proceduresAtPoints[i] = new DoNothing();
@@ -51,14 +51,14 @@ public class FollowPoints extends Procedure {
 
 	public FollowPoints(Point[] points, Procedure[] procedureList) {
 		pointList = points;
-		finalHeader = Robot.drive.getCurrentPosition().getHeading();
+		//finalHeader = Robot.drive.getCurrentPosition().getHeading();
 		proceduresAtPoints = procedureList;
 		loggerCategory = Category.AUTONOMOUS;
 	}
 
 	public FollowPoints(Point[] points, double header) {
 		pointList = points;
-		finalHeader = header;
+		//finalHeader = header;
 		proceduresAtPoints = new Procedure[pointList.length];
 		for (int i = 0; i < proceduresAtPoints.length; i++) {
 			proceduresAtPoints[i] = new DoNothing();
@@ -68,7 +68,7 @@ public class FollowPoints extends Procedure {
 
 	public FollowPoints(Point[] points, double header, Procedure[] procedureList) {
 		pointList = points;
-		finalHeader = header;
+		//finalHeader = header;
 		proceduresAtPoints = procedureList;
 		loggerCategory = Category.AUTONOMOUS;
 	}
@@ -88,12 +88,12 @@ public class FollowPoints extends Procedure {
 			}
 		}
 		if (pointDoubles.length % 2 == 1) {
-			finalHeader = pointDoubles[pointDoubles.length - 1];
+			//finalHeader = pointDoubles[pointDoubles.length - 1];
 		} else {
-			finalHeader = Robot.drive.getCurrentPosition().getHeading();
+			//finalHeader = Robot.drive.getCurrentPosition().getHeading();
 		}
 
-		while (finalHeader > Math.round(Robot.drive.getCurrentPosition().getHeading() / 360) * 360 + 180) {
+		/*while (finalHeader > Math.round(Robot.drive.getCurrentPosition().getHeading() / 360) * 360 + 180) {
 			finalHeader -= 360;
 		}
 		while (finalHeader <= Math.round(Robot.drive.getCurrentPosition().getHeading() / 360) * 360 - 180) {
@@ -106,7 +106,7 @@ public class FollowPoints extends Procedure {
 			finalHeader += 360;
 		}
 
-		p_turningController.setSetpoint(finalHeader);
+		p_turningController.setSetpoint(finalHeader);*/
 	}
 
 	public void run(Context context) {
@@ -136,26 +136,26 @@ public class FollowPoints extends Procedure {
 				//double diff = currentPos.getAngleDifference(targetPoint);
 				//Robot.drive.setDrivePower(straightVelocity + Math.signum(diff) * Math.min(Math.abs(diff) * theBrettConstant, 1 - straightVelocity), straightVelocity - Math.signum(diff) * Math.min(Math.abs(diff) * theBrettConstant, 1 - straightVelocity));
 				
-				p_turningController.calculate(currentPos.getHeading(), true);
+				//p_turningController.calculate(currentPos.getHeading(), true);
 				
-				if(p_turningController.isDone()){
+				/*if(p_turningController.isDone()){
 					turning = 0;
 				} else {
 					turning = p_turningController.getOutput();
-				}
+				}*/
 				Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-				Robot.drive.swerveDrive(new PointDir(currentPos.scaleVector(targetPoint, 0.25), turning));
+				Robot.drive.swerveDrive(new PointDir(currentPos.scaleVector(targetPoint, 0.25), /*turning*/0));
 				log("Current Position: " + currentPos.toString());
 				log("Target Point: " + targetPoint.toString());
-				log("Unit Vector: " + new PointDir(currentPos.scaleVector(targetPoint, 0.25), turning).toString());
+				log("Unit Vector: " + new PointDir(currentPos.scaleVector(targetPoint, 0.25), /*turning*/0).toString());
 
 				context.yield();
 			}
-			while (!p_turningController.isDone()) {
+			/*while (!p_turningController.isDone()) {
 				turning = p_turningController.getOutput();
 				Robot.drive.turning(turning);
 				context.yield();
-			}
+			}*/
 			Robot.drive.drive2D(0, 0);
 			log("Finished method!");
 		} else {
