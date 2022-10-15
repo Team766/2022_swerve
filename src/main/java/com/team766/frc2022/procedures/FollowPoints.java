@@ -151,11 +151,12 @@ public class FollowPoints extends Procedure {
 
 				context.yield();
 			}
-			while (!p_turningController.isDone()) {
+			/*while (!p_turningController.isDone()) {
 				turning = p_turningController.getOutput();
+				Robot.drive.drive2D(0,0);
 				Robot.drive.turning(turning);
 				context.yield();
-			}
+			}*/
 			Robot.drive.drive2D(0, 0);
 			log("Finished method!");
 		} else {

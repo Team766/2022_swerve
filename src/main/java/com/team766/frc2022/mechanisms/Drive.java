@@ -87,16 +87,16 @@ public class Drive extends Mechanism {
  
 		
 		//Current limit for motors to avoid breaker problems (mostly to avoid getting electrical people to yell at us)
-		m_DriveFrontRight.setCurrentLimit(15);
-		m_DriveFrontLeft.setCurrentLimit(15);
-		m_DriveBackRight.setCurrentLimit(15);
-		m_DriveBackLeft.setCurrentLimit(15);
+		m_DriveFrontRight.setCurrentLimit(35);
+		m_DriveFrontLeft.setCurrentLimit(35);
+		m_DriveBackRight.setCurrentLimit(35);
+		m_DriveBackLeft.setCurrentLimit(35);
 		m_DriveBackLeft.setInverted(true);
 		m_DriveBackRight.setInverted(true);
-		m_SteerFrontRight.setCurrentLimit(10);
-		m_SteerFrontLeft.setCurrentLimit(10);
-		m_SteerBackRight.setCurrentLimit(10);
-		m_SteerBackLeft.setCurrentLimit(10);
+		m_SteerFrontRight.setCurrentLimit(30);
+		m_SteerFrontLeft.setCurrentLimit(30);
+		m_SteerBackRight.setCurrentLimit(30);
+		m_SteerBackLeft.setCurrentLimit(30);
 
 		//Setting up the connection between steering motors and cancoders
 		//m_SteerFrontRight.setRemoteFeedbackSensor(e_FrontRight, 0);
