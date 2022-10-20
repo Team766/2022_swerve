@@ -11,7 +11,7 @@ def ROBOT_MAIN_CLASS = "com.team766.hal.wpilib.RobotMain"
 /*sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources"
+            srcDirs "src/main/resources", "src/main/configs"
         }
     }
 }*/
