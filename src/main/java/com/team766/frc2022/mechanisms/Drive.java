@@ -18,6 +18,7 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
 
 public class Drive extends Mechanism {
+	//Length = left/right sides of swerve; Width = front/back of swerve,
 	public final ValueProvider<Double> LENGTH_OF_CHASSIS = ConfigFileReader.getDouble("LENGTH_OF_CHASSIS");
 	public final ValueProvider<Double> WIDTH_OF_CHASSIS = ConfigFileReader.getDouble("WIDTH_OF_CHASSIS");
 
@@ -35,7 +36,7 @@ public class Drive extends Mechanism {
 	private CANCoder e_FrontLeft;
 	private CANCoder e_BackRight;
 	private CANCoder e_BackLeft;
-    
+
 	private ValueProvider<Double> drivePower;
 
 	private double gyroValue;
@@ -99,28 +100,37 @@ public class Drive extends Mechanism {
 		m_SteerBackLeft.setSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		configPID();
 	}
+
 	//If you want me to repeat code, then no.
 	public double pythagrian(double x, double y) {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 	}
+
+	//Clockwise angle from top y-axis of joystick and angle joystick is pointed in
 	public double getAngle(double LR, double FB){
 		return Math.toDegrees(Math.atan2(LR ,-FB));
 	}
+
 	public double round(double value, int places) {
 		double scale = Math.pow(10, places);
 		return Math.round(value * scale) / scale;
 	}
+
+	// angle of vector1 + vector2
 	public double NewAng(double FirstMag, double FirstAng, double SecondMag, double SecondAng){
 		double FinalX = FirstMag*Math.cos(Math.toRadians(FirstAng)) + SecondMag*Math.cos(Math.toRadians(SecondAng));
 		double FinalY = FirstMag*Math.sin(Math.toRadians(FirstAng)) + SecondMag*Math.sin(Math.toRadians(SecondAng));
 		return round(Math.toDegrees(Math.atan2(FinalY,FinalX)),5);
 	}
+
+	// magnitude of vector1 + vector2
 	public double NewMag(double FirstMag, double FirstAng, double SecondMag, double SecondAng){
 		double FinalX = FirstMag*Math.cos(Math.toRadians(FirstAng)) + SecondMag*Math.cos(Math.toRadians(SecondAng));
 		double FinalY = FirstMag*Math.sin(Math.toRadians(FirstAng)) + SecondMag*Math.sin(Math.toRadians(SecondAng));
 		return round(Math.sqrt(Math.pow(FinalX,2) + Math.pow(FinalY,2)),5);
 	}
 
+	// Bruh why. We don't even call this
 	public static double correctedJoysticks(double Joystick){
 		if(Joystick >= 0)
 			  return(3.0*Math.pow(Joystick,2)-2.0*Math.pow(Joystick,3));
@@ -128,7 +138,10 @@ public class Drive extends Mechanism {
 		  return(-1*3.0*Math.pow(-1*Joystick,2)+2.0*Math.pow(-1*Joystick,3));
 	}
 
-	
+	//angle = angle of the joystick, gyro = gryo angle, gyro angle = clockwise angle from "forward" direction to direction front of swerve is facing
+	//gyro angle is set to 0 when the front of the swerve is facing the other side of the field (this is "forward" direction) and turning clockwise increases gyro
+	//angle-gyro = angle that the wheel has to be in respect to direction the front of swerve is facing
+	//angle-gyro is not the angle that the wheel has to turn, but the angle position the wheel has to turn to
 	public static double fieldAngle(double angle, double gyro){
 		double newAngle;
 		newAngle = angle - gyro;
@@ -140,35 +153,47 @@ public class Drive extends Mechanism {
 		}
 		return newAngle;
 	}
+
+	//newAngle = angle that the wheel has to be in respect to direction front of swerve is facing
+	//lastAngle = current angle of wheels; adds/subtract 360 to newAngle so it is less than 180 degrees from lastAngle
+	//newAngle will probably be greater than 360 or less than 0 because gyro doesn't reset
 	public static double newAngle(double newAngle, double lastAngle){
 		while(newAngle<0) newAngle += 360;
 		while(newAngle < (lastAngle - 180)) newAngle+=360;
 		while(newAngle > (lastAngle + 180)) newAngle-=360;
 		return newAngle;
 	}
+
 	//Not the actual gyro, but I am passing it through the OI.java to get it here
 	public void setGyro(double value){
 		gyroValue = value;
 	}
+
 	//This is the method that is called to drive the robot in the 2D plane
-    public void drive2D(double JoystickX, double JoystickY) {
+    //This does movement in all directions but not spinning
+	public void drive2D(double JoystickX, double JoystickY) {
 		checkContextOwnership();
 		//logs();
 		//double power = pythagrian((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
-		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY));
-		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue);
+		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY)); //power = maximum of the two joysticks
+		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue); //angle = angle the wheels have to be with respect to direction front of robot is facing
 		log("Given angle: " + getAngle(JoystickX,JoystickY) + " || Gyro: " + gyroValue + " || New angle: " + angle);
+
 		//Temporary Drive code, kinda sucks
+		//Sets the drive motors to power
 		m_DriveFrontRight.set(power);
 		m_DriveFrontLeft.set(power);
 		m_DriveBackRight.set(power);
 		m_DriveBackLeft.set(power);
+
 		//Steer code
+		// Sets/corrects angle given by fieldAngle method as it will probably be outside of range (0 to 360)
 		setFrontRightAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerFrontRight.getSensorPosition()));
 		setFrontLeftAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerFrontLeft.getSensorPosition()));
 		setBackRightAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerBackRight.getSensorPosition()));
 		setBackLeftAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerBackLeft.getSensorPosition()));
 	}
+
     public void stopDriveMotors() {
 		checkContextOwnership();
 		m_DriveFrontRight.stopMotor();
@@ -176,6 +201,7 @@ public class Drive extends Mechanism {
 		m_DriveBackRight.stopMotor();
 		m_DriveBackLeft.stopMotor();
 	}
+
 	public void stopSteerMotors() {
 		checkContextOwnership();
 		m_SteerFrontRight.stopMotor();
@@ -184,9 +210,11 @@ public class Drive extends Mechanism {
 		m_SteerBackLeft.stopMotor();
 	}
 
-
-	public void swerveDrive(double JoystickX, double JoystickY, double JoystickTheta){
+	// Actual swerveDrive code that is called in OI.java
+	public void swerveDrive(double JoystickX, double JoystickY, double TurningSpeed){
 		checkContextOwnership();
+
+		//First sets magnitude/angle for translational vector
 		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY));
 		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue);
 		double frPower;
@@ -197,32 +225,39 @@ public class Drive extends Mechanism {
 		double flAngle;
 		double brAngle;
 		double blAngle;
-		if(JoystickTheta >= 0){
-			frPower = NewMag(power, angle, JoystickTheta, 135);
-			flPower = NewMag(power, angle, JoystickTheta, 45);
-			brPower = NewMag(power, angle, JoystickTheta, -135);
-			blPower = NewMag(power, angle, JoystickTheta, -45);
-			frAngle = NewAng(power, angle, JoystickTheta, 135);
-			flAngle = NewAng(power, angle, JoystickTheta, 45);
-			brAngle = NewAng(power, angle, JoystickTheta, -135);
-			blAngle = NewAng(power, angle, JoystickTheta, -45);
+
+		//Then sets magnitude/angle for rotational vector and adds the rotational/translational vectors
+		//Rotational vector magnitude is TurningSpeed (Turning Speed is how fast swerve rotates)
+		if(TurningSpeed >= 0){ //clockwise turning
+			frPower = NewMag(power, angle, TurningSpeed, Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flPower = NewMag(power, angle, TurningSpeed, 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brPower = NewMag(power, angle, TurningSpeed, 180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blPower = NewMag(power, angle, TurningSpeed, 360-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frAngle = NewAng(power, angle, TurningSpeed, Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flAngle = NewAng(power, angle, TurningSpeed, 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brAngle = NewAng(power, angle, TurningSpeed, 180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blAngle = NewAng(power, angle, TurningSpeed, 360-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
 		}
-		else{
-			frPower = NewMag(power, angle, Math.abs(JoystickTheta), -45);
-			flPower = NewMag(power, angle, Math.abs(JoystickTheta), -135);
-			brPower = NewMag(power, angle, Math.abs(JoystickTheta), 45);
-			blPower = NewMag(power, angle, Math.abs(JoystickTheta), 135);
-			frAngle = NewAng(power, angle, Math.abs(JoystickTheta), -45);
-			flAngle = NewAng(power, angle, Math.abs(JoystickTheta), -135);
-			brAngle = NewAng(power, angle, Math.abs(JoystickTheta), 45);
-			blAngle = NewAng(power, angle, Math.abs(JoystickTheta), 135);
+		else{ //counterclockwise turning
+			frPower = NewMag(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flPower = NewMag(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brPower = NewMag(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blPower = NewMag(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frAngle = NewAng(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flAngle = NewAng(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brAngle = NewAng(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blAngle = NewAng(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
 		}
+
+		//If any of the drivepowers are above 1, then it divides all the drivepowers by the largest drivepower
 		if(Math.max(Math.max(frPower,flPower), Math.max(brPower,blPower)) > 1){
 			frPower /= Math.max(Math.max(frPower,flPower), Math.max(brPower,blPower));
 			flPower /= Math.max(Math.max(frPower,flPower), Math.max(brPower,blPower));
 			brPower /= Math.max(Math.max(frPower,flPower), Math.max(brPower,blPower));
 			blPower /= Math.max(Math.max(frPower,flPower), Math.max(brPower,blPower));
 		}
+
+		//Drive code
 		m_DriveFrontRight.set(frPower);
 		m_DriveFrontLeft.set(flPower);
 		m_DriveBackRight.set(brPower);
@@ -235,7 +270,7 @@ public class Drive extends Mechanism {
 	}
 
 	 
-	    
+	//This was probabaly for testing, not actually used
 public void turning(double Joystick){
 	checkContextOwnership();
 	if(Joystick > 0){
@@ -260,6 +295,7 @@ public void turning(double Joystick){
 	}
 }
 
+	//Cancoder/CANSpeedController stuff to precisely steer robot
 	//Logging the encoder values (also I love Github Copilot <3)
 	public void logs(){
 		log("Front Right Encoder: " + getFrontRight() + " Front Left Encoder: " + getFrontLeft() + " Back Right Encoder: " + getBackRight() + " Back Left Encoder: " + getBackLeft());
@@ -295,6 +331,8 @@ public void turning(double Joystick){
 		//log("Angle: " + getBackLeft() + " || Motor angle: " + m_SteerBackLeft.getSensorPosition());
 		m_SteerBackLeft.set(ControlMode.Position, 2048.0/360.0 * (150.0/7.0) * angle);
 	}
+
+	// This code isn't used
 	public void setSFR(double angle){
 		setFrontRightAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerFrontRight.getSensorPosition()));
 	}
@@ -307,6 +345,7 @@ public void turning(double Joystick){
 	public void setSBL(double angle){
 		setBackLeftAngle(newAngle(angle, Math.pow((2048.0/360.0 * (150.0/7.0)), -1) * m_SteerFrontRight.getSensorPosition()));
 	}
+
 	public void configPID(){
 		//PID for turning the various steering motors. Here is a good link to a tuning website: https://www.robotsforroboticists.com/pid-control/
 		m_SteerFrontRight.setP(0.2);
