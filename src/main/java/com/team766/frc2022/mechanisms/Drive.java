@@ -229,24 +229,24 @@ public class Drive extends Mechanism {
 		//Then sets magnitude/angle for rotational vector and adds the rotational/translational vectors
 		//Rotational vector magnitude is TurningSpeed (Turning Speed is how fast swerve rotates)
 		if(TurningSpeed >= 0){ //clockwise turning
-			frPower = NewMag(power, angle, TurningSpeed, Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			flPower = NewMag(power, angle, TurningSpeed, 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			brPower = NewMag(power, angle, TurningSpeed, 180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			blPower = NewMag(power, angle, TurningSpeed, 360-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			frAngle = NewAng(power, angle, TurningSpeed, Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			flAngle = NewAng(power, angle, TurningSpeed, 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			brAngle = NewAng(power, angle, TurningSpeed, 180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			blAngle = NewAng(power, angle, TurningSpeed, 360-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frPower = NewMag(power, angle, TurningSpeed, Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flPower = NewMag(power, angle, TurningSpeed, 180-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brPower = NewMag(power, angle, TurningSpeed, 180+Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blPower = NewMag(power, angle, TurningSpeed, 360-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frAngle = NewAng(power, angle, TurningSpeed, Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flAngle = NewAng(power, angle, TurningSpeed, 180-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brAngle = NewAng(power, angle, TurningSpeed, 180+Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blAngle = NewAng(power, angle, TurningSpeed, 360-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
 		}
 		else{ //counterclockwise turning
-			frPower = NewMag(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			flPower = NewMag(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			brPower = NewMag(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			blPower = NewMag(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			frAngle = NewAng(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			flAngle = NewAng(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			brAngle = NewAng(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
-			blAngle = NewAng(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.tan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frPower = NewMag(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flPower = NewMag(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brPower = NewMag(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blPower = NewMag(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			frAngle = NewAng(power, angle, Math.abs(TurningSpeed), -180+Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			flAngle = NewAng(power, angle, Math.abs(TurningSpeed), -Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			brAngle = NewAng(power, angle, Math.abs(TurningSpeed), Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
+			blAngle = NewAng(power, angle, Math.abs(TurningSpeed), 180-Math.toDegrees(Math.atan(LENGTH_OF_CHASSIS.get()/WIDTH_OF_CHASSIS.get())));
 		}
 
 		//If any of the drivepowers are above 1, then it divides all the drivepowers by the largest drivepower
