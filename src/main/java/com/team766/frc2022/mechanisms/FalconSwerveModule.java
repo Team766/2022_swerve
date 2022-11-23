@@ -30,7 +30,7 @@ public class FalconSwerveModule implements SwerveModule{
 		configPID(m_drive);
 		configPID(m_steer);
 		//zero out the steer motor encoder
-		m_steer.setPosition((int) Math.round(CPR/360.0 * (reduction) * e_steer.getAbsolutePosition()))
+		m_steer.setPosition((int) Math.round(CPR/360.0 * (reduction) * e_steer.getAbsolutePosition()));
 	}
 
 	public void setSteerAngle(double angle){
