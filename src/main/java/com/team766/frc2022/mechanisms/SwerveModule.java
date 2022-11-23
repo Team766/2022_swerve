@@ -17,7 +17,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 
 public interface SwerveModule{
-	default setup(CANCoder e_steer, CANSpeedController m_drive, CANSpeedController m_steer){
+	default void setup(CANCoder e_steer, CANSpeedController m_drive, CANSpeedController m_steer){
 		CANCoderConfiguration config = new CANCoderConfiguration();
 		config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 		//The encoders output "encoder" values, so we need to convert that to degrees (because that is what the cool kids are using)
