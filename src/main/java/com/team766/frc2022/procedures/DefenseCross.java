@@ -5,6 +5,9 @@ import com.team766.framework.Procedure;
 import com.team766.frc2022.Robot;
 import com.team766.logging.Category;
 
+/* This procedure sets a defensive wheel orientation.
+The orientation reduces the load on our drive motors by 1.4x */
+
 public class DefenseCross extends Procedure {
 
 	public void run(Context context) {

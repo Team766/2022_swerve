@@ -99,10 +99,6 @@ public class Drive extends Mechanism {
 		m_SteerBackLeft.setSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		configPID();
 	}
-	//If you want me to repeat code, then no.
-	public double pythagrian(double x, double y) {
-		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-	}
 	public double getAngle(double LR, double FB){
 		return Math.toDegrees(Math.atan2(LR ,-FB));
 	}
@@ -153,8 +149,6 @@ public class Drive extends Mechanism {
 	//This is the method that is called to drive the robot in the 2D plane
     public void drive2D(double JoystickX, double JoystickY) {
 		checkContextOwnership();
-		//logs();
-		//double power = pythagrian((JoystickX), correctedJoysticks(JoystickY))/Math.sqrt(2);
 		double power = Math.max(Math.abs(JoystickX),Math.abs(JoystickY));
 		double angle = fieldAngle(getAngle(JoystickX, JoystickY),gyroValue);
 		log("Given angle: " + getAngle(JoystickX,JoystickY) + " || Gyro: " + gyroValue + " || New angle: " + angle);
@@ -328,14 +322,6 @@ public void turning(double Joystick){
 		m_SteerBackLeft.setI(0);
 		m_SteerBackLeft.setD(0.1);
 		m_SteerBackLeft.setFF(0);
-
-		//pid values from sds for Flacons 500: P = 0.2 I = 0.0 D = 0.1 FF = 0.0
-
-		//IDK what those do tbh, but I like to keep them here.
-		//m_SteerFrontRight.setSensorInverted(false);
-		//m_SteerFrontLeft.setSensorInverted(false);
-		//m_SteerBackRight.setSensorInverted(false);
-		//m_SteerBackLeft.setSensorInverted(false);
 	}
 
 	//Method to get the encoder values, the encoders are in degrees from -180 to 180. To change that, we need to change the syntax and use getPosition()

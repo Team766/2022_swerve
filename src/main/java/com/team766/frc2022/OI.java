@@ -14,9 +14,9 @@ import com.team766.logging.Category;
  * interface to the code that allow control of the robot.
  */
 public class OI extends Procedure {
+	//declaring the variables we will use later on
 	private JoystickReader m_leftJoystick;
 	private JoystickReader m_rightJoystick;
-	//private JoystickReader m_ControlPanel;
 	private double RightJoystick_X = 0;
 	private double RightJoystick_Y = 0;
 	private double RightJoystick_Z = 0;
@@ -26,32 +26,34 @@ public class OI extends Procedure {
 	private double LeftJoystick_Z = 0;
 	private double LeftJoystick_Theta = 0;
 	double turningValue = 0;
-	public OI() {
-		loggerCategory = Category.OPERATOR_INTERFACE;
 
+	public OI() {
+		//this sets what category our logs will go to
+		loggerCategory = Category.OPERATOR_INTERFACE;
+		//setup the joysticks
 		m_leftJoystick = RobotProvider.instance.getJoystick(0);
 		m_rightJoystick = RobotProvider.instance.getJoystick(1);
-		//m_ControlPanel = RobotProvider.instance.getJoystick(12);
+
 	}
 
 	public void run(Context context) {
 		double prev_time = RobotProvider.instance.getClock().getTime();
+		//take ownership of the appropriate threads
 		context.takeOwnership(Robot.gyro);
 		context.takeOwnership(Robot.drive);
-		//Robot.gyro.resetGyro();
+		
+		//make sure our encoders are setup right
 		Robot.drive.setFrontRightEncoders();
 		Robot.drive.setFrontLeftEncoders();
 		Robot.drive.setBackRightEncoders();
 		Robot.drive.setBackLeftEncoders();
 		
+		//this is where the actual "controlling" happens
 		while (true) {
-			//log(getAngle(m_leftJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT) ,m_leftJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)));
-			/*if(m_rightJoystick.getButton(2)){
-				Robot.drive.setGyro(0);
-			}else{
-				Robot.drive.setGyro(Robot.gyro.getGyroYaw());
-			}*/
-			Robot.drive.setGyro(Robot.gyro.getGyroYaw());		
+			//get the robot orientation
+			Robot.drive.setGyro(Robot.gyro.getGyroYaw());
+
+			//Check the joystick positions but don't count drift		
 			if(Math.abs(m_rightJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)) > 0.05){
 				RightJoystick_Y = m_rightJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD);
 			} else {
@@ -85,116 +87,28 @@ public class OI extends Procedure {
 			} else {
 				LeftJoystick_Theta = 0;
 			}
-			//log(Robot.gyro.getGyroYaw());			
-			//TODO: fix defense: the robot basically locks up if there is defense
-			// if(m_leftJoystick.getButton(InputConstants.CROSS_DEFENSE)){
-			// 	context.startAsync(new DefenseCross());
-			// }
-			
-			/*if(Math.pow(Math.pow(m_leftJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT),2) + Math.pow(m_leftJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD),2), 0.5) > 0.15 ){
-				Robot.drive.drive2D(
-					((m_leftJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT))),
-					((m_leftJoystick.getAxis(InputConstants.AXIS_FORWARD_BACKWARD)))
-				);
-			}  else {
-				if(Math.abs(m_leftJoystick.getAxis(InputConstants.AXIS_TWIST))>=0.1){
-					Robot.drive.turning(m_leftJoystick.getAxis(InputConstants.AXIS_TWIST));
-				} else {
-				Robot.drive.stopDriveMotors();
-				Robot.drive.stopSteerMotors();
-				}
-			}*/
-			if(m_rightJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_GYRO))
+
+			if(m_rightJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_GYRO)){
 				Robot.gyro.resetGyro();
-			
-			/*if(m_leftJoystick.getButtonPressed(2)){
-				Robot.drive.setFrontRightEncoders();
-				Robot.drive.setFrontLeftEncoders();
-				Robot.drive.setBackRightEncoders();
-				Robot.drive.setBackLeftEncoders();
-			}*/
-			// if(m_rightJoystick.getButton(1)){
-			// 	turningValue = m_rightJoystick.getAxis(InputConstants.AXIS_LEFT_RIGHT); 
-			// } else {
-			// 	turningValue = 0;
-			// }
-			if(Math.abs(LeftJoystick_X)+
-			Math.abs(LeftJoystick_Y)+  Math.abs(RightJoystick_X) > 0){
-			Robot.drive.swerveDrive( 
-				(LeftJoystick_X),
-			 	(LeftJoystick_Y),
-			 	(RightJoystick_X)
-			);} else{
+			}
+
+			//pass the joystick info to the swerve drive
+			if(Math.abs(LeftJoystick_X)+Math.abs(LeftJoystick_Y)+Math.abs(RightJoystick_X) > 0){
+				Robot.drive.swerveDrive( 
+					(LeftJoystick_X),
+					(LeftJoystick_Y),
+					(RightJoystick_X)
+				);
+			} else{
+				//if the joysticks aren't being used, stop driving
 				Robot.drive.stopDriveMotors();
 				Robot.drive.stopSteerMotors();				
 			}
 
-			/*
-			if (m_ControlPanel.getButton(InputConstants.CONTROL_PANEL_ELEVATOR_UP_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(1);
-				context.releaseOwnership(Robot.elevator);
-				log("UP");
-			} else if (m_ControlPanel.getButtonReleased(InputConstants.CONTROL_PANEL_ELEVATOR_UP_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(0);
-				context.releaseOwnership(Robot.elevator);
-				log("UP Stop");
-			} 
-
-			if (m_ControlPanel.getButton(InputConstants.CONTROL_PANEL_ELEVATOR_DOWN_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(-1);
-				context.releaseOwnership(Robot.elevator);
-				log("Down");
-			} else if (m_ControlPanel.getButtonReleased(InputConstants.CONTROL_PANEL_ELEVATOR_DOWN_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(0);
-				context.releaseOwnership(Robot.elevator);
-				log("down stop");
-			} 
-			*/
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(1);
-				context.releaseOwnership(Robot.elevator);
-				log("UP");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_UP_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(0);
-				context.releaseOwnership(Robot.elevator);
-				log("UP Stop");
-			} 
-
-			if (m_rightJoystick.getButton(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(-1);
-				context.releaseOwnership(Robot.elevator);
-				log("Down");
-			} else if (m_rightJoystick.getButtonReleased(InputConstants.JOYSTICK_ELEVATOR_DOWN_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setElevatorPower(0);
-				context.releaseOwnership(Robot.elevator);
-				log("down stop");
-			} 
-
-			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_ARMS_BACKWARDS_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setArmsPower(1);
-				context.releaseOwnership(Robot.elevator);
-			} else if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_ARMS_FORWARDS_BUTTON)) {
-				context.takeOwnership(Robot.elevator);
-				Robot.elevator.setArmsPower(-1);
-				context.releaseOwnership(Robot.elevator);
-			}
-
-			if (m_leftJoystick.getButtonPressed(InputConstants.JOYSTICK_RESET_ELEVATOR)) {
-				log("Activated");
-				context.startAsync(new ResetElevator());
-			}
-
+			//check how long this took
 			double cur_time = RobotProvider.instance.getClock().getTime();
-				context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
+			//only run the next iteration of the loop when we have new joystick data from the driver station
+			context.waitFor(() -> RobotProvider.instance.hasNewDriverStationData());
 		}
 	}
 }
