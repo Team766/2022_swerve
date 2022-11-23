@@ -40,6 +40,6 @@ public interface SwerveModule{
 
 	void setSteerAngle();
 
-	void setDrivePower();
+	void setDrivePower(double power);
 
 }
