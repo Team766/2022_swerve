@@ -38,7 +38,7 @@ public interface SwerveModule{
 		return newAngle;
 	}
 
-	void setSteerAngle();
+	void setSteerAngle(double angle);
 
 	void setDrivePower(double power);
 
